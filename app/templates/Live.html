@@ -1,0 +1,94 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Monitoreo en Tiempo Real{% endblock %}
+
+{% block stylesheets %}
+  <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block content %}
+
+
+<main class="flex">
+
+  <!-- Filtro lateral -->
+<aside class="w-60 bg-white shadow-md p-4 m-4 rounded">
+  <h2 class="font-bold mb-4 text-lg">Filtros</h2>
+
+  <!-- Filtro de Parcelas -->
+  <label for="filtroParcelas" class="block text-sm mb-1">Parcela</label>
+  <select id="filtroParcelas" class="w-full px-3 py-2 border rounded mb-4">
+    <option value="todas">Todas</option>
+    <option value="parcela-a">Parcela A</option>
+    <option value="parcela-b">Parcela B</option>
+    <option value="parcela-c">Parcela C</option>
+  </select>
+
+  <!-- Filtro de Áreas -->
+  <label for="filtroAreas" class="block text-sm mb-1">Área</label>
+  <select id="filtroAreas" class="w-full px-3 py-2 border rounded">
+    <option value="todas">Todas</option>
+    <option value="area-1">Área 1</option>
+    <option value="area-2">Área 2</option>
+    <option value="area-3">Área 3</option>
+  </select>
+</aside>
+
+  <!-- Contenido -->
+  <section class="flex-1 grid grid-cols-2 gap-6 p-4">
+    <h1 class="col-span-2 text-3xl font-bold italic">MONITOREO EN TIEMPO REAL</h1>
+
+    <!-- Tarjetas con video -->
+    <div class="bg-white rounded shadow p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <img src="https://img.icons8.com/ios-filled/20/fa314a/video.png" />
+        <h2 class="font-bold">ÁREA DE CULTIVO S1-A001</h2>
+      </div>
+      <video id="cam1" autoplay muted class="w-full rounded mb-2"></video>
+      <button onclick="ampliarVista('cam1')" class="bg-green-600 text-white px-3 py-1 rounded text-sm">Vista Ampliada</button>
+    </div>
+
+    <div class="bg-white rounded shadow p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <img src="https://img.icons8.com/ios-filled/20/fa314a/video.png" />
+        <h2 class="font-bold">ÁREA DE CULTIVO S1-A002</h2>
+      </div>
+      <video id="cam2" autoplay muted class="w-full rounded mb-2"></video>
+      <button onclick="ampliarVista('cam2')" class="bg-green-600 text-white px-3 py-1 rounded text-sm">Vista Ampliada</button>
+    </div>
+
+    <!-- Puedes duplicar más si quieres más cámaras -->
+  </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  async function startCamera(videoId) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const video = document.getElementById(videoId);
+      if (video) {
+        video.srcObject = stream;
+      }
+    } catch (error) {
+      alert("No se pudo acceder a la cámara: " + error.message);
+    }
+  }
+
+  function ampliarVista(videoId) {
+    const video = document.getElementById(videoId);
+    if (video.requestFullscreen) {
+      video.requestFullscreen();
+    } else if (video.webkitRequestFullscreen) {
+      video.webkitRequestFullscreen(); // Safari
+    } else if (video.msRequestFullscreen) {
+      video.msRequestFullscreen(); // IE11
+    }
+  }
+
+  // Iniciar cámaras
+  startCamera('cam1');
+  startCamera('cam2');
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Dashboard - Reportes{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/hero.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+   <div class="svg-inline" data-src="{{ url_for('static', filename='image/logo.svg') }}"></div>
+  <h1>Oculus</h1>   
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block scripts %}{% endblock %}

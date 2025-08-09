@@ -1,0 +1,105 @@
+{% extends "layout/InitBase.html" %}
+
+{% block title %}Oculus - Sistema de Monitoreo{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="forms__background signin__background">
+    <div class="forms signin__form">
+        <!-- Formulario -->
+        <h2 class="forms__title">Regístrate</h2>
+        <form method="POST" action="{{ url_for('auth.procesar_registro') }}" id="signinForm" >
+
+            <!-- Nombres y Apellidos -->
+            <div class="forms__group--double">
+                <div class="forms__group halft">
+                    <input type="text" name="first_name" id="first_name" class="forms__input--text" placeholder=" "
+                        required>
+                    <label for="first_name" class="forms__label">Nombres</label>
+                </div>
+                <div class="forms__group halft">
+                    <input type="text" name="last_name" id="last_name" class="forms__input--text" placeholder=" "
+                        required>
+                    <label for="last_name" class="forms__label">Apellidos</label>
+                </div>
+            </div>
+
+            <!-- Nombre de Usuario -->
+            <div class="forms__group">
+                <input type="text" name="username" id="username" class="forms__input--text" placeholder=" " required>
+                <label for="username" class="forms__label">Nombre de usuario</label>
+            </div>
+            
+            <!-- Correo -->
+            <div class="forms__group">
+                <input type="email" name="email" id="email" class="forms__input--text" placeholder=" " required 
+                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingresa un correo electrónico válido.">
+
+                <label for="email" class="forms__label">E-mail</label>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="forms__group">
+                <input type="password" name="password" id="password" class="forms__input--text" placeholder=" " required
+                    minlength="8">
+                <label for="password" class="forms__label">Contraseña</label>
+                <div class="svg-inline password__toggle"
+                    data-src="{{ url_for('static', filename='image/icons/visibility_off.svg') }}" role="button"
+                    tabindex="0">
+                </div>
+            </div>
+
+            <!-- Confirmar Contraseña -->
+            <div class="forms__group">
+                <input type="password" name="confirm_password" id="confirm_password" class="forms__input--text"
+                    placeholder=" " required>
+                <label for="confirm_password" class="forms__label">Confirmar Contraseña</label>
+                <div class="svg-inline password__toggle"
+                    data-src="{{ url_for('static', filename='image/icons/visibility_off.svg') }}" role="button"
+                    tabindex="0">
+                </div>
+            </div>
+
+            <!-- Validaciones Visuales (contraseña) -->
+            <div class="forms__group forms__group--validations">
+                <ul class="forms__list">
+                    <li id="length-validation">🔒 Mínimo 8 caracteres</li>
+                    <li id="chars-validation">🔠 Al menos 1 mayúscula, 1 minúscula y 1 número</li>
+                    <li id="match-validation">✅ Las contraseñas coinciden</li>
+                </ul>
+            </div>
+
+            <!-- Aceptar términos -->
+            <div class="forms__group check__validator flex-row">
+                <label class="forms__label--checkbox">
+                    <input type="checkbox" name="terms" class="forms__checkbox" id="termsCheckbox" required 
+               title="Debe aceptar los Términos de Servicio y la Política de Privacidad">
+                    <span>Acepto los Términos de Servicio y Política de Privacidad</span>
+                </label>
+            </div>
+
+
+            <!-- Botón Crear Cuenta -->
+            <div class="forms__group forms__button">
+                <button type="submit" class="btn btn__submit">Crear Cuenta</button>
+            </div>
+
+            <!-- Ya tienes cuenta -->
+            <div class="forms__footer">
+                <p>¿Ya tienes una cuenta?
+                    <a href="{{ url_for('auth.mostrar_login') }}" class="forms__link">Entrar</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block sripts %}
+<script src="{{ url_for('static', filename='js/validators.js') }}"></script>
+{% endblock %}
+
+{% block footer %}{% endblock %}

@@ -1,0 +1,409 @@
+/* Fondo */
+.forms__background {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 1.25rem;
+  background-size: contain;
+  background-position: center;
+  min-height: 100%;
+}
+
+.login__background {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+    url('/static/image/background/login.png');
+}
+
+
+@supports (background-image: url('/static/image/background/login.webp')) {
+  .login__background {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+      url('/static/image/background/login.webp');
+  }
+}
+
+.signin__background {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+    url('/static/image/background/signin.png');
+}
+
+
+@supports (background-image: url('/static/image/background/signin.webp')) {
+  .signin__background {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+      url('/static/image/background/signin.webp');
+  }
+}
+
+
+/* Contenedor General */
+.login__form {
+  border-radius: 7px;
+  border: 2px solid var(--negro);
+  box-shadow: var(--shadow-md);
+  padding: 1.2rem;
+}
+
+.login__form form {
+  min-width: 22vw;
+}
+
+.signin__form {
+  border-radius: 7px;
+  border: 2px solid var(--negro);
+  box-shadow: var(--shadow-md);
+  padding: 1.7rem 1.2rem 1.2rem 1.2rem;
+}
+
+.signin__form form {
+  min-width: 25vw;
+}
+
+/* Header */
+.forms__header {
+  text-align: center;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.forms__header .svg-inline {
+  max-width: 5rem;
+  height: auto;
+}
+
+/* Grupo de campos */
+.forms__group {
+  position: relative;
+  color: var(--gris-claro);
+  margin-top: .7rem;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.forms__group--double {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.halft {
+  width: 48%;
+}
+
+.forms__input--text {
+  width: 100%;
+  height: 2.5rem;
+  padding: .3rem .7rem;
+  border: 2px solid var(--negro);
+  color: var(--negro);
+  border-radius: 7px;
+  background-color: #ffffffbf;
+  transition: all 0.3s ease;
+}
+
+.forms__input--text:focus {
+  outline: none;
+  border-color: var(--verde);
+}
+
+.forms__group .svg-inline {
+  max-width: 1rem;
+  height: auto;
+  position: absolute;
+  right: .9rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.forms__label {
+  position: absolute;
+  top: 50%;
+  left: .5rem;
+  transform: translateY(-50%);
+  background-color: var(--blanco);
+  color: var(--negro);
+  font-size: var(--text-base);
+  padding: 0 .3rem;
+  pointer-events: none;
+  transition: .3s ease;
+}
+
+/* Label flotante */
+.forms__input--text:focus~.forms__label,
+.forms__input--text:not(:placeholder-shown)~.forms__label {
+  top: 0;
+  left: 0.5rem;
+  font-family: 'Acme', sans-serif;
+}
+
+/* En foco cambia a verde */
+.forms__input--text:focus~.forms__label {
+  color: var(--verde);
+}
+
+/* color por defecto */
+.forms__input--text:not(:focus)~.forms__label {
+  color: var(--negro);
+}
+
+/* Validaciones visuales */
+.forms__input--text:invalid~.forms__label {
+  border-color: var(--rojo);
+}
+
+input.forms:valid {
+  border-color: var(--verde);
+  background-color: var(--blanco);
+}
+
+/* Eliminar el toggle de contraseña nativo del navegador */
+input[type="password"]::-webkit-reveal,
+input[type="password"]::-webkit-caps-lock-indicator,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  position: absolute;
+  right: -9999px;
+}
+
+input[type="password"]::-moz-reveal {
+  display: none !important;
+}
+
+/* Estilos para el toggle de contraseña */
+.password__toggle {
+  position: absolute;
+  right: .9rem !important;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* Estado activo (cuando se muestra la contraseña) */
+.password__toggle.active {
+  opacity: 0.8;
+}
+
+/* Checkbox */
+.forms__label--checkbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 .5rem 0;
+}
+
+.forms__label--checkbox span {
+  color: var(--negro);
+  margin-left: .4rem;
+}
+
+.forms__checkbox {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--gris);
+  border-radius: 7px;
+  appearance: none;
+  cursor: pointer;
+}
+
+.forms__checkbox:checked {
+  background-color: var(--verde-claro);
+}
+
+.check__validator {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Botón de envío */
+.forms__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.9375rem;
+}
+
+.btn__submit {
+  background-color: var(--verde);
+  color: var(--blanco);
+  width: 100%;
+  border: none;
+}
+
+.btn__submit:hover {
+  background-color: #0d845c;
+  box-shadow: 2px 2px 0px #004e35;
+}
+
+
+/* Divider de redes sociales */
+.forms__divider {
+  display: flex;
+  align-items: center;
+  margin-top: .5rem;
+  color: var(--gris);
+  font-family: 'Acme', sans-serif;
+  font-size: 1rem;
+  gap: 1rem;
+}
+
+.forms__divider::before,
+.forms__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--gris);
+}
+
+/* Botones sociales */
+.forms__group--social {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.btn__social {
+  width: 8rem;
+  height: 2.4rem;
+  background-color: var(--blanco);
+  border: 1px solid var(--negro);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn__social img {
+  width: 20px;
+  height: 20px;
+}
+
+.btn__social:hover {
+  background-color: var(--gris-claro);
+  border: 1px solid var(--negro);
+}
+
+/* Footer / Registro */
+.forms__footer {
+  text-align: center;
+  margin-bottom: .5rem;
+}
+
+.forms__link {
+  color: var(--azul);
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.forms__link--right {
+  margin-left: auto;
+}
+
+.forms__group--validations {
+  margin: 0;
+  padding: 0;
+}
+
+.forms__list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+  text-align: left;
+  font-size: var(--text-sm);
+  color: var(--negro);
+}
+
+/* Estilos para cada ítem de validación */
+#length-validation,
+#chars-validation,
+#match-validation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+/* Clases para estados de validación (usarás con JS) */
+.validation-error {
+  color: var(--rojo);
+}
+
+.validation-success {
+  color: var(--verde);
+}
+
+
+/* Estilos adicionales específicos para el perfil */
+.profile__forms {
+  max-width: 37.5rem;
+  margin: 1.4rem auto;
+  padding: 1.6rem;
+  background-color: var(--blanco);
+  border-radius: 7px;
+  border: 2px solid var(--negro);
+  box-shadow: var(--shadow-md);
+}
+
+.profile__forms form {
+  width: 100%;
+}
+
+.profile__header {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1.2rem;
+  align-items: center;
+  width: 100%;
+}
+
+.profile__header .svg-inline svg {
+  width: 2.7rem;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.profile__avatar {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.profile__avatar img {
+  width: 8rem;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--verde);
+}
+
+.profile__info {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.profile__username {
+  font-weight: bold;
+  margin: 0;
+}
+
+.profile__email {
+  color: var(--gris);
+  margin: 0.15rem 0 0;
+}

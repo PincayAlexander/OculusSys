@@ -1,0 +1,93 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Perfil de Usuario{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="forms profile__forms">
+  <div class="profile__header">
+    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/account.svg') }}"></div>
+    <h2>Mi Perfil</h2>
+  </div>
+
+  <div class="profile__avatar">
+    <img src="{{ url_for('static', filename='image/other/profile.png') }}" alt="Avatar">
+    <div class="profile__info">
+      <p class="profile__username">{{ usuario.first_name }}  {{ usuario.last_name }}</p>
+      <p class="profile__email">{{ usuario.email }}</p>
+    </div>
+  </div>
+
+  <form id="profileForm" class="" method="POST" action="{{ url_for('auth.actualizar_perfil') }}">
+    <!-- Nombres y Apellidos -->
+    <div class="forms__group--double">
+      <div class="forms__group halft">
+        <input type="text" name="first_name" id="first_name" class="forms__input--text" placeholder=" "
+          value="{{ usuario.first_name }}" required>
+        <label for="first_name" class="forms__label">Nombres</label>
+      </div>
+      <div class="forms__group halft">
+        <input type="text" name="last_name" id="last_name" class="forms__input--text" placeholder=" "
+          value="{{ usuario.last_name }}" required>
+        <label for="last_name" class="forms__label">Apellidos</label>
+      </div>
+    </div>
+
+    <!-- Nombre de Usuario y Correo -->
+    <div class="forms__group--double">
+      <div class="forms__group halft">
+        <input type="text" name="username" id="username" class="forms__input--text" placeholder=" "
+          value="{{ usuario.username }}" required>
+        <label for="username" class="forms__label">Nombre de usuario</label>
+      </div>
+      <div class="forms__group halft">
+        <input type="email" name="email" id="email" class="forms__input--text" placeholder=" "
+          value="{{ usuario.email }}" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+          title="Ingresa un correo electrónico válido.">
+        <label for="email" class="forms__label">E-mail</label>
+      </div>
+    </div>
+
+    <!-- Contraseñas -->
+    <div class="forms__group--double">
+      <div class="forms__group halft">
+        <input type="password" name="password" id="password" class="forms__input--text" placeholder=" " minlength="8">
+        <label for="password" class="forms__label">Nueva contraseña</label>
+        <div class="svg-inline password__toggle"
+          data-src="{{ url_for('static', filename='image/icons/visibility_off.svg') }}" role="button" tabindex="0">
+        </div>
+      </div>
+      <div class="forms__group halft">
+        <input type="password" name="confirm_password" id="confirm_password" class="forms__input--text" placeholder=" ">
+        <label for="confirm_password" class="forms__label">Confirmar contraseña</label>
+        <div class="svg-inline password__toggle"
+          data-src="{{ url_for('static', filename='image/icons/visibility_off.svg') }}" role="button" tabindex="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- Validaciones Visuales (contraseña) -->
+    <div class="forms__group forms__group--validations">
+      <ul class="forms__list">
+        <li id="length-validation">🔒 Mínimo 8 caracteres</li>
+        <li id="chars-validation">🔠 Al menos 1 mayúscula, 1 minúscula y 1 número</li>
+        <li id="match-validation">✅ Las contraseñas coinciden</li>
+      </ul>
+    </div>
+
+    <!-- Botón de envío -->
+    <div class="forms__buttons">
+      <button type="submit" class="btn btn__submit">
+        <span>Guardar cambios</span>
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/validators.js') }}"></script>
+{% endblock %}

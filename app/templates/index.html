@@ -1,0 +1,21 @@
+{% extends "layout/InitBase.html" %}
+
+{% block title %}Oculus - Sistema de Monitoreo{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/hero.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="hero">
+  <div class="svg-inline" data-src="{{ url_for('static', filename='image/logo.svg') }}"></div>
+  <h1>Oculus - Sistema de Monitoreo</h1>
+  <p>MUCHO MÁS QUE VER</p>
+  <a href="{{ url_for('auth.mostrar_signin') }}" class="btn btn--suscribe">SUSCRÍBETE AHORA</a>
+  <p class="hero__price">Los planes empiezan desde $800000.99 / mes</p>
+</main>
+{% endblock %}
+
+{% block sripts %}{% endblock %}
+
+{% block footer %}{% endblock %}

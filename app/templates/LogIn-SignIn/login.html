@@ -1,0 +1,78 @@
+{% extends "layout/InitBase.html" %}
+
+{% block title %}Oculus - Sistema de Monitoreo{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="forms__background login__background">
+    <div class="forms login__form">
+
+        <div class="forms__header">
+            <div class="svg-inline" data-src="{{ url_for('static', filename='image/logo.svg') }}"></div>
+            <h2 class="forms__title">Sistema de Monitoreo</h2>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.autenticar_usuario') }}" id="loginForm">
+
+            <!-- Grupo Usuario/Email -->
+            <div class="forms__group">
+                <input type="text" name="Profile" id="Profile" class="forms__input--text" placeholder=" " required>
+                <label for="Profile" class="forms__label">Usuario o Correo</label>
+                <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/user.svg') }}"></div>
+            </div>
+
+            <!-- Grupo Contraseña -->
+            <div class="forms__group">
+                <input type="password" name="Password" id="Password" class="forms__input--text" placeholder=" " required
+                    minlength="8">
+                <label for="Password" class="forms__label">Contraseña</label>
+                <div class="svg-inline password__toggle"
+                    data-src="{{ url_for('static', filename='image/icons/visibility_off.svg') }}" role="button"
+                    tabindex="0"></div>
+            </div>
+
+            <!-- Recordarme + ¿Olvidaste tu contraseña? -->
+            <div class="forms__group flex-row">
+                <label class="forms__label--checkbox">
+                    <input type="checkbox" name="remember_me" class="forms__checkbox">
+                    <span>Recuerdame</span>
+                </label>
+                <a href="#" class="forms__link forms__link--right">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <!-- Botón Ingresar -->
+            <div class="forms__group forms__button">
+                <button type="submit" class="btn btn__submit">Entrar</button>
+            </div>
+
+            <!-- Divider -->
+            <div class="forms__divider">Iniciar sesión con</div>
+
+            <!-- Botones sociales -->
+            <div class="forms__group forms__group--social">
+                <a href="#" class="btn btn__social btn_google">
+                    <img src="{{ url_for('static', filename='image/icons/Google.svg') }}" alt="Google"></a>
+                <a href="#" class="btn btn__social btn__facebook">
+                    <img src="{{ url_for('static', filename='image/icons/Facebook.svg') }}" alt="Facebook"></a>
+            </div>
+
+            <!-- Registro -->
+            <div class="forms__footer">
+                <p>¿No tienes cuenta?
+                    <a href="{{ url_for('auth.mostrar_signin') }}" class="forms__link">Regístrate</a>
+                </p>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/validators.js') }}"></script>
+{% endblock %}
+
+{% block footer %}{% endblock %}

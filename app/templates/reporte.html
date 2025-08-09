@@ -1,0 +1,122 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Dashboard - Reportes{% endblock %}
+
+{% block stylesheets %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reporte.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <div class="sidebar">
+    <div class="card">
+      <h4>🔺 Cantidad de Detecciones</h4>
+      <div id="detecciones" class="progress-text" style="color: red">330</div>
+    </div>
+    <div class="card">
+      <h4>🟡 Cantidad de Controlado</h4>
+      <div id="controlado" class="progress-text" style="color: green">247</div>
+    </div>
+    <div class="card">
+      <h4>Áreas Monitoreadas</h4>
+      <ul>
+        <li>Parcela 1 - Presencia de Roya</li>
+        <li>Parcela 2 - Presencia de Mildiu</li>
+        <li>Parcela 3 - Sana</li>
+        <li>Parcela 4 - Sana</li>
+        <li>Parcela 5 - Presencia de Mancha de hierro</li>
+        <li>Parcela 6 - Sana</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="chart-section">
+      <div class="top-bar">
+        <h3>Cantidad de Detecciones vs Controles</h3>
+        <div class="filter-bar">
+          <label for="dateRange">📅</label>
+          <select id="dateRange">
+            <option value="enero-julio">Enero - Julio</option>
+            <option value="marzo-junio">Marzo - Junio</option>
+            <option value="mayo-julio">Mayo - Julio</option>
+          </select>
+          <button id = "abrirModal" class="btn">📥 Descargar</button>
+        </div>
+      </div>
+      <canvas id="lineChart"></canvas>
+    </div>
+
+    <div class="row">
+      <div class="card" style="flex: 1">
+        <h4>% de Plagas Controlado</h4>
+        <canvas id="gaugeControlado"></canvas>
+      </div>
+      <div class="card" style="flex: 1">
+        <h4>% de Plagas Sin Controlar</h4>
+        <canvas id="gaugeSinControlar"></canvas>
+      </div>
+      <div class="card" style="flex: 2">
+        <h4>Tipos de Plagas Detectadas</h4>
+        <canvas id="barChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="modalDescarga" class="modal">
+  <div class="modal-content">
+    <span class="close" id="cerrarModal">&times;</span>
+    <h3>Descargar Informe de Sistema</h3>
+
+    <div class="campo">
+      <label><a href="#">Área de cultivo</a></label>
+      <div class="flex-row">
+        <select>
+          <option>Todos</option>
+        </select>
+        <select>
+          <option>Todos</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Rango de fechas</label>
+      <div class="flex-row">
+        <input type="date" value="2025-08-02">
+        <input type="date" value="2025-08-02">
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Formato</label>
+      <div class="flex-row formatos">
+        <button class="formato ppt">Power Point</button>
+        <button class="formato xls">Excel</button>
+        <button class="formato pdf">PDF</button>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Nombre del archivo:</label>
+      <input type="text" placeholder="nombre_archivo">
+    </div>
+
+    <div class="acciones">
+      <button class="cancelar" id="cancelarDescarga">Cancelar</button>
+      <button class="exportar">Exportar</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/reporte.js') }}"></script>
+    <!-- jsPDF y html2canvas para exportar a PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- PptxGenJS para exportar a PowerPoint -->
+    <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.10.0/dist/pptxgen.bundle.js"></script>
+{% endblock %}

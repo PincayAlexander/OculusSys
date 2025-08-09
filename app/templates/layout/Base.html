@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Oculus{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='image/logo.svg') }}" type="image/svg+xml">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Acme&family=Oswald:wght@200..700&display=swap"
+        rel="stylesheet">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="nav">
+        <!-- Logo -->
+        <div class="nav__logo">
+            <a href="{{ url_for('index') }}" class="nav__logo--link">
+                <div class="svg-inline" data-src="{{ url_for('static', filename='image/logo.svg') }}"></div>
+                <span> Oculus </span>
+            </a>
+        </div>
+
+        <!-- Menú -->
+        <ul class="nav__menu">
+            <li class="nav__menu--item">
+                <a href="{{url_for('inicio.menu_inicio')}}" class="nav__menu--link">
+                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/inicio.svg') }}"></div>
+                    Inicio
+                </a>
+            </li>
+            <li class="nav__menu--item">
+                <a href="{{url_for('reporte.vista_reporte') }}" class="nav__menu--link">
+                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/reporte.svg') }}">
+                    </div>
+                    Reportes
+                </a>
+            </li>
+            <li class="nav__menu--item">
+                <a href="{{ url_for('camara.vista_camara') }}" class="nav__menu--link">
+                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/camara.svg') }}"></div>
+                    Cámaras
+                </a>
+            </li>
+            <li class="nav__menu--item">
+                <a href="{{ url_for('detecciones.vista_detecciones') }}" class="nav__menu--link">
+                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/deteccion.svg') }}">
+                    </div>
+                    Detecciones
+                </a>
+            </li>
+            <li class="nav__menu--item">
+                <a href="#" class="nav__menu--link">
+                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/ayuda.svg') }}"></div>
+                    Ayuda
+                </a>
+            </li>
+            <li class="nav__menu--item">
+                <a href="#" class="nav__menu--link">
+                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/ajuste.svg') }}"></div>
+                    Ajustes
+                </a>
+            </li>
+        </ul>
+
+        <!-- Perfil -->
+        <div class="nav__profile">
+            <!-- Notificaciones -->
+            <div class="nav__notifications dropdown">
+                <button class="nav__notifications-button dropdown__toggle">
+                    <div class="nav__notifications-icon svg-inline"
+                        data-src="{{ url_for('static', filename='image/icons/notifications.svg') }}"></div>
+                </button>
+                <div class="dropdown__menu dropdown__menu--notifications">
+                    <div class="dropdown__item dropdown__item--notification">🔔 Nueva detección en cámara 1</div>
+                    <div class="dropdown__item dropdown__item--notification">🛠️ Actualización del sistema</div>
+                    <div class="dropdown__item dropdown__item--notification">📊 Nuevo reporte generado</div>
+                    <div class="dropdown__item dropdown__item--notification">👤 Nuevo usuario registrado</div>
+                </div>
+            </div>
+
+            <!-- Perfil de usuario -->
+            <div class="nav__user dropdown">
+                <button class="nav__user-button dropdown__toggle">
+                    <img src="{{ url_for('static', filename='image/other/profile.png') }}" alt="Avatar"
+                        class="nav__user-avatar">
+                </button>
+                <div class="dropdown__menu dropdown__menu--user">
+                    <div class="dropdown__header">{{ usuario.usuario }}</div>
+                    <div class="dropdown__divider"></div>
+                    <div class="dropdown__item"><a class="dropdown__link"
+                            href="{{url_for('auth.vista_perfil')}}">Personalizar Perfil</a></div>
+                    <div class="dropdown__item"><a class="dropdown__link" href="#">Cambiar Contraseña</a></div>
+                    <div class="dropdown__divider"></div>
+                    <div class="dropdown__item"><a class="dropdown__link dropdown__link--danger"
+                            href="{{ url_for('auth.cerrar_sesion') }}">Cerrar sesión</a></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="flash-message" class="flash-container"></div>
+    <script>
+        window.flaskMessages = {{ get_flashed_messages(with_categories = true) | tojson }};
+    </script>
+
+    <!-- Contenido principal -->
+    <main class="contentainer">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        {% block footer %}{% endblock %}
+    </footer>
+
+    <!-- Scripts -->
+    {% block scripts %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+
+</html>

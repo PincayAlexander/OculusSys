@@ -1,0 +1,148 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Detección Positiva de Plaga{% endblock %}
+
+{% block stylesheets %}
+<style>
+  .container {
+    display: flex;
+    padding: 20px;
+  }
+
+  .sidebar {
+    width: 200px;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+  }
+
+
+  .sidebar select {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+
+  .main-content {
+    flex: 1;
+  }
+
+  .card {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  .card ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .card ul li {
+    margin: 0 0 0 .9rem;
+    padding: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .alert {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .image-section {
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background: white;
+  }
+
+  .image-section img {
+    width: 100%;
+    border-radius: 5px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Sidebar con filtros separados -->
+  <aside class="sidebar">
+    <h3>Filtros</h3>
+
+    <label for="filtroArea" class="block text-sm mb-1">Área</label>
+    <select id="filtroArea">
+      <option>Área 1</option>
+      <option>Área 2</option>
+      <option>Área 3</option>
+    </select>
+
+    <label for="filtroParcela" class="block text-sm mb-1">Parcela</label>
+    <select id="filtroParcela">
+      <option>Parcela A</option>
+      <option>Parcela B</option>
+      <option>Parcela C</option>
+    </select>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <h2>DETECCIÓN POSITIVA DE PLAGA</h2>
+
+    <div class="card">
+      <h3>Ubicación de la detección</h3>
+      <div class="grid">
+        <div><strong>Provincia:</strong> Manabí</div>
+        <div><strong>Finca:</strong> Los Ajos</div>
+        <div><strong>Plantación:</strong> Sección de Café 002</div>
+        <div><strong>Bloque:</strong> Bloque A</div>
+        <div><strong>Coordenadas:</strong> -1.22445, -91.02</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Plaga detectada</h3>
+      <div class="grid">
+        <div><strong>Nombre común:</strong> La Roya</div>
+        <div><strong>Nombre científico:</strong> Hemileia vastatrix</div>
+        <div><strong>Descripción:</strong> Presencia de manchas amarillentas en la parte superior de la hoja</div>
+        <div><strong>Fecha de detección:</strong> 2025-06-30</div>
+        <div><strong>Hora de detección:</strong> 10:45 AM</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Grado de afectación</h3>
+      <p><strong>Moderado Severo:</strong></p>
+      <ul>
+        <li>Manchas amarillas en el haz de las hojas.</li>
+        <li>Bordes anaranjados en infecciones de hongos avanzadas.</li>
+        <li>Presencia elevada de esporas visibles sobre el limbo en progresión activa.</li>
+      </ul>
+    </div>
+
+    <div class="alert">
+      ⚠️ ÁREA DE CULTIVO S1-A002: Presencia de 'La Roya'
+    </div>
+
+    <div class="image-section">
+
+      <img src="{{ url_for('static', filename='image/other/rectangle-67.png') }}" alt="Hoja afectada por La Roya" />
+    </div>
+  </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

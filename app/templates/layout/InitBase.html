@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Nombre de la aplicación -->
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="icon" type="image/svg" href="{{ url_for('static', filename='image/logo.svg') }}">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Acme&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+  <!-- Hojas de Estilo -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+  {% block stylesheets %}{% endblock %}
+</head>
+
+<body>
+  <nav class="navInit">
+    <div class="navInit__logo">
+      <a href="{{ url_for('index') }}" class="navInit__logo--link">
+        <div class="svg-inline" data-src="{{ url_for('static', filename='image/logo.svg') }}"></div>
+        <span> Oculus </span>
+      </a>
+    </div>
+    <div class="navInit__buttons">
+      <a href="{{ url_for('auth.mostrar_login') }}" class="btn btn__login">Iniciar Sesión</a>
+      <a href="{{ url_for('auth.mostrar_signin') }}" class="btn btn__signup">Crear Cuenta</a>
+    </div>
+  </nav>
+
+  <div id="flash-message" class="flash-container"></div>
+  <script>
+    window.flaskMessages = {{ get_flashed_messages(with_categories = true) | tojson }};
+  </script>
+
+  <!-- Contenido -->
+  <div class="containerInit">
+    {% block content %}{% endblock %}
+
+    <!-- Scripts -->
+    {% block sripts %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+</body>
+
+<footer>
+  {% block footer %}{% endblock %}
+</footer>
+
+</html>
