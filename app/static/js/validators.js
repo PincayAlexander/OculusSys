@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     } catch (error) {
-      mostrarFlashMensaje('Error de conexión con el servidor', 'danger');
+      mostrarFlashMensaje('Error de conexión con el servidor', 'error');
     }
   });
 
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const inputGroup = errorElement.closest('.forms__group');
       if (inputGroup) inputGroup.classList.add('has-error');
     } else {
-      mostrarFlashMensaje(message, 'danger');
+      mostrarFlashMensaje(message, 'error');
     }
   }
 
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } else {
         if (result.error) {
-          mostrarFlashMensaje(result.error, 'danger');
+          mostrarFlashMensaje(result.error, 'error');
         } else if (result.errors) {
           Object.entries(result.errors).forEach(([field, message]) => {
             showError(field, message);
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (error) {
       console.error('Error:', error);
-      mostrarFlashMensaje('Error de conexión con el servidor', 'danger');
+      mostrarFlashMensaje('Error de conexión con el servidor', 'error');
     }
   });
 
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const inputGroup = errorElement.closest('.forms__group');
       if (inputGroup) inputGroup.classList.add('has-error');
     } else {
-      mostrarFlashMensaje(message, 'danger');
+      mostrarFlashMensaje(message, 'error');
     }
   }
 });

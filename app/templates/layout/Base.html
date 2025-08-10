@@ -128,6 +128,9 @@
     </nav>
 
     <div id="flash-message" class="flash-container"></div>
+    <script>
+        window.flaskMessages = {{ get_flashed_messages(with_categories = true) | tojson }};
+    </script>
 
     <!-- Contenido principal -->
     <main class="contentainer">

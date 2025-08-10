@@ -242,7 +242,7 @@ form {
   border-color: #699f71;
 }
 
-.flash.danger {
+.flash.error {
   background-color: #f8d7da;
   color: var(--rojo);
   border-color: #dc5966;

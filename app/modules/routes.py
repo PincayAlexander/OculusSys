@@ -1,10 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
 from app.utils import login_required, get_current_user, guardar_notificacion
 from app.database import db
 from app.database.models import usuario, notificacion
 from passlib.hash import scrypt
 import re
-from datetime import datetime
 
 # -------------------------
 # RUTAS INICIO
@@ -39,10 +38,12 @@ def autenticar_usuario():
     user = usuario.query.filter_by(email=profile).first() if is_email else usuario.query.filter_by(username=profile).first()
 
     if not user or not scrypt.verify(password, user.password):
-        return jsonify({"message": "Usuario o contraseña incorrectos", "category": "error", "errorType": "password"}), 400
+        flash("Usuario o contraseña incorrectos", "error")
+        return redirect(url_for('auth.mostrar_login'))
 
     if user.estado == 'inactivo':
-        return jsonify({"message": "Cuenta inactiva. Contacta al administrador.", "category": "error", "errorType": "inactivo"}), 400
+        flash("Cuenta inactiva. Contacta al administrador.", "error")
+        return redirect(url_for('auth.mostrar_login'))
 
     session.clear()
     session['userID'] = user.idUsuario
@@ -55,15 +56,18 @@ def autenticar_usuario():
 
     guardar_notificacion(user.idUsuario, "Inicio de sesión", "info", f"Usuario {user.username} inició sesión correctamente.")
 
-    return jsonify({"message": f"Bienvenido, {user.first_name}!", "category": "success", "errorType": None})
+    flash(f"Bienvenido, {user.first_name}!", "success")
+    return redirect(url_for('inicio.menu_inicio'))
 
 @usuario_bp.route('/logOut', methods=['GET'])
 @login_required
 def cerrar_sesion():
     user_id = session.get('userID')
     session.clear()
-#    if user_id:  guardar_notificacion(user_id, "Cierre de sesión", "info", "Sesión cerrada exitosamente.")
-    return jsonify({"message": "Sesión cerrada exitosamente", "category": "success", "errorType": None})
+    # if user_id:
+    #     guardar_notificacion(user_id, "Cierre de sesión", "info", "Sesión cerrada exitosamente.")
+    flash("Sesión cerrada exitosamente", "success")
+    return redirect(url_for('auth.mostrar_login'))
 
 @usuario_bp.route('/signIn', methods=['GET'])
 def mostrar_signin():
@@ -73,35 +77,21 @@ def mostrar_signin():
 
 @usuario_bp.route('/register', methods=['POST'])
 def procesar_registro():
-    is_json = request.content_type == 'application/json'
-    data = request.get_json() if is_json else request.form.to_dict()
+    data = request.form.to_dict()
 
-    # Validar email existente
     if usuario.query.filter_by(email=data.get('email')).first():
-        return jsonify({
-            "message": "El correo electrónico ya está registrado",
-            "category": "error",
-            "errorType": "email"
-        }), 400
+        flash("El correo electrónico ya está registrado", "error")
+        return redirect(url_for('auth.mostrar_signin'))
 
-    # Validar username existente
     username = data.get('username') or data.get('email', '').split('@')[0]
     if usuario.query.filter_by(username=username).first():
-        return jsonify({
-            "message": "El nombre de usuario ya existe",
-            "category": "error",
-            "errorType": "username"
-        }), 400
+        flash("El nombre de usuario ya existe", "error")
+        return redirect(url_for('auth.mostrar_signin'))
 
-    # Validar contraseñas coincidan
     if data.get('password') != data.get('confirm_password'):
-        return jsonify({
-            "message": "Las contraseñas no coinciden",
-            "category": "error",
-            "errorType": "password"
-        }), 400
+        flash("Las contraseñas no coinciden", "error")
+        return redirect(url_for('auth.mostrar_signin'))
 
-    # Registro en base de datos
     try:
         new_user = usuario(
             first_name=data['first_name'],
@@ -117,20 +107,13 @@ def procesar_registro():
 
         guardar_notificacion(new_user.idUsuario, "Registro", "success", f"Usuario {new_user.username} registrado exitosamente.")
 
-        return jsonify({
-            "message": "Registro exitoso. ¡Bienvenido!",
-            "category": "success",
-            "errorType": None
-        }), 200
-
+        flash("Registro exitoso. ¡Bienvenido!", "success")
+        return redirect(url_for('auth.mostrar_login'))
     except Exception as e:
         db.session.rollback()
         print(f"Error en registro: {e}")
-        return jsonify({
-            "message": "Error al registrar usuario",
-            "category": "error",
-            "errorType": None
-        }), 500
+        flash("Error al registrar usuario", "error")
+        return redirect(url_for('auth.mostrar_signin'))
 
 @usuario_bp.route('/perfil', methods=['GET'])
 @login_required
@@ -153,33 +136,38 @@ def obtener_perfil():
 def actualizar_perfil():
     user = usuario.query.get(session['userID'])
     if not user:
-        return jsonify({"message": "Usuario no encontrado", "category": "error", "errorType": None}), 404
+        flash("Usuario no encontrado", "error")
+        return redirect(url_for('auth.mostrar_login'))
 
-    data = request.get_json() if request.is_json else request.form.to_dict()
+    data = request.form.to_dict()
     if 'username' in data and data['username'] != user.username:
         if usuario.query.filter_by(username=data['username']).first():
-            return jsonify({"message": "El nombre de usuario ya está en uso", "category": "error", "errorType": "username"}), 400
+            flash("El nombre de usuario ya está en uso", "error")
+            return redirect(url_for('auth.vista_perfil'))
     if 'email' in data and data['email'] != user.email:
         if usuario.query.filter_by(email=data['email']).first():
-            return jsonify({"message": "El correo electrónico ya está en uso", "category": "error", "errorType": "email"}), 400
+            flash("El correo electrónico ya está en uso", "error")
+            return redirect(url_for('auth.vista_perfil'))
 
     for campo in ['first_name', 'last_name', 'username', 'email']:
         if campo in data:
             setattr(user, campo, data[campo])
             if campo in ['username', 'email']:
                 session[campo] = data[campo]
-                
+
     if 'password' in data and data['password']:
         user.password = scrypt.hash(data['password'])
 
     try:
         db.session.commit()
         guardar_notificacion(user.idUsuario, "Perfil actualizado", "info", "Perfil actualizado correctamente.")
-        return jsonify({"message": "Perfil actualizado correctamente", "category": "success", "errorType": None})
+        flash("Perfil actualizado correctamente", "success")
+        return redirect(url_for('auth.vista_perfil'))
     except Exception as e:
         db.session.rollback()
         print(f"Error actualizando perfil: {e}")
-        return jsonify({"message": "Error al actualizar perfil", "category": "error", "errorType": None}), 500
+        flash("Error al actualizar perfil", "error")
+        return redirect(url_for('auth.vista_perfil'))
 
 
 # -------------------------

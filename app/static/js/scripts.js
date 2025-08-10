@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // FLASH MESSAGES
   if (Array.isArray(window.flaskMessages)) {
     window.flaskMessages.forEach(([category, message]) => {
+      console.log(message);
       mostrarFlashMensaje(message, category);
     });
   }
@@ -110,7 +111,7 @@ function togglePasswordVisibility(input, toggle) {
 }
 
 // Funcion para mostrar mensajes flash
-function mostrarFlashMensaje(mensaje, categoria = "info", duracion = 4000) {
+function mostrarFlashMensaje(mensaje, categoria="info", duracion = 4000) {
   const flashContainer = document.getElementById("flash-message");
   if (!flashContainer) return;
 
