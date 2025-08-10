@@ -25,7 +25,8 @@
         <!-- Logo -->
         <div class="nav__logo">
             <a href="{{ url_for('index') }}" class="nav__logo--link">
-                <div class="svg-inline" data-src="{{ url_for('static', filename='image/logo.svg') }}"></div>
+                <div class="svg-inline" rel="preload" data-src="{{ url_for('static', filename='image/logo.svg') }}">
+                </div>
                 <span> Oculus </span>
             </a>
         </div>
@@ -52,16 +53,10 @@
                 </a>
             </li>
             <li class="nav__menu--item">
-                <a href="{{ url_for('detecciones.vista_detecciones') }}" class="nav__menu--link">
+                <a href="{{ url_for('deteccion.vista_detecciones') }}" class="nav__menu--link">
                     <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/deteccion.svg') }}">
                     </div>
                     Detecciones
-                </a>
-            </li>
-            <li class="nav__menu--item">
-                <a href="#" class="nav__menu--link">
-                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/ayuda.svg') }}"></div>
-                    Ayuda
                 </a>
             </li>
             <li class="nav__menu--item">
@@ -95,23 +90,44 @@
                         class="nav__user-avatar">
                 </button>
                 <div class="dropdown__menu dropdown__menu--user">
-                    <div class="dropdown__header">{{ usuario.usuario }}</div>
+                    <div class="dropdown__header">{{ session['username'] }}</div>
                     <div class="dropdown__divider"></div>
-                    <div class="dropdown__item"><a class="dropdown__link"
-                            href="{{url_for('auth.vista_perfil')}}">Personalizar Perfil</a></div>
-                    <div class="dropdown__item"><a class="dropdown__link" href="#">Cambiar Contraseña</a></div>
+                    <div class="dropdown__item">
+                        <a href="{{url_for('auth.vista_perfil')}}" class="dropdown__item--link">
+                            <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/user.svg') }}">
+                            </div>
+                            Personalizar Perfil
+                        </a>
+                    </div>
+                    <div class="dropdown__item">
+                        <a href="#" class="dropdown__item--link">
+                            <div class="svg-inline"
+                                data-src="{{ url_for('static', filename='image/icons/password.svg') }}"></div>
+                            Cambiar Contraseña
+                        </a>
+                    </div>
+                    <div class="dropdown__item">
+                        <a href="#" class="dropdown__item--link">
+                            <div class="svg-inline"
+                                data-src="{{ url_for('static', filename='image/icons/ayuda.svg') }}"></div>
+                            Ayuda
+                        </a>
+                    </div>
                     <div class="dropdown__divider"></div>
-                    <div class="dropdown__item"><a class="dropdown__link dropdown__link--danger"
-                            href="{{ url_for('auth.cerrar_sesion') }}">Cerrar sesión</a></div>
+                    <div class="dropdown__item">
+                        <a href="{{ url_for('auth.cerrar_sesion') }}"
+                            class="dropdown__item--link dropdown__link--danger">
+                            <div class="svg-inline"
+                                data-src="{{ url_for('static', filename='image/icons/logout.svg') }}"></div>
+                            Cerrar sesión
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
     <div id="flash-message" class="flash-container"></div>
-    <script>
-        window.flaskMessages = {{ get_flashed_messages(with_categories = true) | tojson }};
-    </script>
 
     <!-- Contenido principal -->
     <main class="contentainer">

@@ -200,15 +200,31 @@
   font-size: 0.9rem;
 }
 
+
+
 .dropdown__item--notification:last-child {
   border-bottom: none;
 }
 
-.dropdown__link {
-  display: block;
+.dropdown__item--link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   text-decoration: none;
   color: inherit;
   width: 100%;
+  gap: .25rem;
+}
+
+.dropdown__item--link .svg-inline svg {
+  height: 1.1rem;
+  width: auto;
+  color: currentColor;
+  fill: currentColor;
+  background-color: transparent;
+  vertical-align: middle;
+  display: grid;
+  align-items: center;
 }
 
 .dropdown__link--danger {

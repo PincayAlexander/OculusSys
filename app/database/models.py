@@ -5,7 +5,7 @@ class usuario(db.Model):
     __tablename__ = 'usuarios'
     __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_collate': 'utf8mb4_spanish_ci'}
 
-    userID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    idUsuario = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -27,13 +27,14 @@ class notificacion(db.Model):
     __tablename__ = 'notificaciones'
     __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_collate': 'utf8mb4_spanish_ci'}
 
-    id = db.Column(db.Integer, primary_key=True)
-    userID = db.Column(db.Integer, db.ForeignKey('usuarios.userID', ondelete='CASCADE'), nullable=False)
+    idNotificacion = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(100), nullable=False)
     mensaje = db.Column(db.String(255), nullable=False)
     tipo = db.Column(db.Enum('info', 'warning', 'error', 'success'), default='info')
     leido = db.Column(db.Boolean, default=False)
-    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
-
+    fecha = db.Column(db.DateTime, default=datetime.utcnow)
+    idUsuario = db.Column(db.Integer, db.ForeignKey('usuarios.idUsuario', ondelete='CASCADE'), nullable=False)
+    
     usuario = db.relationship('usuario', back_populates='notificaciones')
 
     def to_dict(self):

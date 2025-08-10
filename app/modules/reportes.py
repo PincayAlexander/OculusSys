@@ -1,5 +1,6 @@
-from flask import render_template, make_response, request, Blueprint, send_file, flash, current_app, redirect, url_for
-
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify, current_app, send_file
+from sqlalchemy.exc import SQLAlchemyError
+from app.database import db
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak, Image
 from reportlab.lib.pagesizes import letter, A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet
@@ -9,9 +10,21 @@ from datetime import datetime
 import io
 import os
 
-report_bp = Blueprint('reportes',__name__, template_folder='app/templates')
+reporte_bp = Blueprint('reporte', __name__, template_folder='app/templates')
+
+@reporte_bp.route('/document', methods=['GET'])
+def vista_reporte():
+    if 'userID' in session:
+        return render_template('reporte.html')
+    return redirect(url_for('auth.mostrar_login'))
 
 
+
+
+
+
+
+"""
 @report_bp.route('/generar_pdf', methods=['POST', 'GET'])
 def generar_pdf_route():
     tipo = request.args.get('tipo', 'all')
@@ -67,14 +80,14 @@ def generar_pdf(tipo, filtros):
 
         for i, estudiante in enumerate(datos):
             elementos.append(Spacer(1, 24))
-            info = f"""
+            info = f""
                 <b>Estudiante:</b> {estudiante['estudiante']}<br/>
                 <b>Cédula:</b> {estudiante['cedula']}<br/>
                 <b>Nivel:</b> {estudiante['nivel']}<br/>
                 <b>Paralelo:</b> {estudiante['paralelo']}<br/>
                 <b>Periodo:</b> {estudiante['periodo']} ({estudiante['duracion_periodo']})<br/>
                 <b>Fecha Matrícula:</b> {estudiante['fecha_matricula']}<br/>
-            """
+            ""
             elementos.append(Paragraph(info, styles['Normal']))
             elementos.append(Spacer(1, 24))
             elementos += generar_tabla_asignaciones_matricula(estudiante['asignaciones'], styles)
@@ -96,12 +109,12 @@ def generar_pdf(tipo, filtros):
 
         for i, estudiante in enumerate(datos):
             elementos.append(Spacer(1, 24))
-            info = f"""
+            info = f""
                 <b>Estudiante:</b> {estudiante['apellido']} {estudiante['nombre']} <br/>
                 <b>Cédula:</b> {estudiante['cedula']}<br/>
                 <b>Nivel:</b> {estudiante['nivel']}<br/>
                 <b>Paralelo:</b> {estudiante['paralelo']}<br/>
-            """
+            ""
             elementos.append(Paragraph(info, styles['Normal']))
             elementos.append(Spacer(1, 18))
             elementos += generar_tabla_calificaciones_por_estudiante(estudiante, styles)
@@ -160,255 +173,4 @@ def agregar_footer(canvas, doc):
     canvas.restoreState()
     
 
-def generar_tabla_asignaciones_matricula(asignaciones, styles):
-    elementos = []
-    encabezado = ['DOCENTE', 'MATERIA', 'NIVEL', 'PARALELO', 'NOTA FINAL']
-    tabla_data = [encabezado]
-
-    for asign in asignaciones:
-        fila = [
-            asign['profesor'],
-            asign['materia'],
-            asign['nivel'],
-            asign['paralelo'],
-            f"{asign['promedio_final']:.2f}"
-        ]
-        tabla_data.append(fila)
-
-    tabla = Table(tabla_data, hAlign='CENTER', repeatRows=1, colWidths=[140, 120, 60, 60, 70])
-    tabla.setStyle([
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
-        ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, -1), 9),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-    ])
-    elementos.append(tabla)
-    return elementos
-
-
-def generar_tabla_calificaciones_por_estudiante(datos, styles):
-    elementos = []
-    encabezado = [
-        'MATERIA', 'DOCENTE',
-        'Aut. Q1', 'Prác. Q1', 'Lecc. Q1', 'Exam. Q1', 'Prom. Q1',
-        'Aut. Q2', 'Prác. Q2', 'Lecc. Q2', 'Exam. Q2', 'Prom. Q2',
-        'Final'
-    ]
-
-    tabla_data = [encabezado]
-    for materia in datos['materias']:
-        fila = [
-            materia['materia'],
-            materia['profesor'],
-            materia['notas']['primer_quimestre']['autonoma'],
-            materia['notas']['primer_quimestre']['practica'],
-            materia['notas']['primer_quimestre']['leccion'],
-            materia['notas']['primer_quimestre']['examen'],
-            materia['notas']['primer_quimestre']['promedio'],
-            materia['notas']['segundo_quimestre']['autonoma'],
-            materia['notas']['segundo_quimestre']['practica'],
-            materia['notas']['segundo_quimestre']['leccion'],
-            materia['notas']['segundo_quimestre']['examen'],
-            materia['notas']['segundo_quimestre']['promedio'],
-            materia['notas']['final']
-        ]
-        tabla_data.append(fila)
-
-    tabla = Table(tabla_data, hAlign='CENTER', repeatRows=1)
-    tabla.setStyle([
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
-        ('BACKGROUND', (0, 0), (-1, 0), colors.lightblue),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, -1), 9),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-    ])
-    elementos.append(tabla)
-    return elementos
-
-
-from app.database import db
-from app.database.models import Matricula, MatriculaAsignacion, Estudiante, Profesor, Curso, PeriodoLectivo, AsignacionCurso, Materia, Calificacion
-
-def obtener_matriculas(filtros=None):
-    # Consulta de matrículas activas
-    query_matriculas = db.session.query(
-        Matricula.idMatricula,
-        Estudiante.Apellido,
-        Estudiante.Nombre,
-        Estudiante.Cedula,
-        Matricula.FechaMatricula,
-        Matricula.Nivel,
-        Matricula.Paralelo,
-        Matricula.PromedioAnual,
-        PeriodoLectivo.Nombre.label('Periodo'),
-        db.func.concat(
-            db.func.date_format(PeriodoLectivo.FechaInicio, '%M'), '-',
-            db.func.date_format(PeriodoLectivo.FechaFin, '%M')
-        ).label('DuracionPeriodo')
-    ).join(Estudiante, Estudiante.idEstudiante == Matricula.idEstudiante) \
-     .join(PeriodoLectivo, PeriodoLectivo.idPeriodo == Matricula.idPeriodo) \
-     .filter(PeriodoLectivo.Estado == 'Activo')
-     
-    if filtros:
-        if 'nivel' in filtros:
-            query_matriculas = query_matriculas.filter(Matricula.Nivel == filtros['nivel'])
-        if 'paralelo' in filtros:
-            query_matriculas = query_matriculas.filter(Matricula.Paralelo == filtros['paralelo'])
-    matriculas = query_matriculas.all()
-
-    if not matriculas:
-        raise ValueError('No hay matrículas registradas con los filtros proporcionados')
-    
-    # Consulta de asignaciones con calificación final
-    asignaciones = db.session.query(
-        MatriculaAsignacion.idMatricula,
-        Materia.Nombre.label('materia'),
-        Curso.Paralelo,
-        Curso.Nivel,
-        Profesor.Apellido.label('profesor_apellido'),
-        Profesor.Nombre.label('profesor_nombre'),
-        Calificacion.PromedioFinal
-    ).join(AsignacionCurso, AsignacionCurso.idCursoAsignacion == MatriculaAsignacion.idCursoAsignacion) \
-     .join(Materia, Materia.idMateria == AsignacionCurso.idMateria) \
-     .join(Profesor, Profesor.idProfesor == AsignacionCurso.idProfesor) \
-     .join(Curso, Curso.idCurso == AsignacionCurso.idCurso) \
-     .join(PeriodoLectivo, PeriodoLectivo.idPeriodo == AsignacionCurso.idPeriodo) \
-     .join(Calificacion, Calificacion.idMatriculaAsignacion == MatriculaAsignacion.idMatriculaAsignacion) \
-     .filter(PeriodoLectivo.Estado == 'Activo') \
-     .all()
-
-    # Indexar asignaciones por idMatricula
-    asignaciones_dict = {}
-    for asign in asignaciones:
-        if asign.idMatricula not in asignaciones_dict:
-            asignaciones_dict[asign.idMatricula] = []
-        asignaciones_dict[asign.idMatricula].append({
-            'materia': asign.materia,
-            'nivel': asign.Nivel,
-            'paralelo': asign.Paralelo,
-            'profesor': f"{asign.profesor_nombre} {asign.profesor_apellido}",
-            'promedio_final': float(asign.PromedioFinal) if asign.PromedioFinal is not None else 0.0
-        })
-
-    # Unir matrículas con sus asignaciones
-    resultado = []
-    for mat in matriculas:
-        matricula = {
-            'idMatricula': mat.idMatricula,
-            'cedula': mat.Cedula,
-            'estudiante': f"{mat.Apellido} {mat.Nombre}",
-            'fecha_matricula': mat.FechaMatricula.strftime('%Y-%m-%d'),
-            'nivel': mat.Nivel,
-            'paralelo': mat.Paralelo,
-            'periodo': mat.Periodo,
-            'duracion_periodo': mat.DuracionPeriodo,
-            'promedio_anual': float(mat.PromedioAnual) if mat.PromedioAnual else 0.0,
-            'asignaciones': asignaciones_dict.get(mat.idMatricula, [])
-        }
-        resultado.append(matricula)
-        
-    #print(f'resultado matriculas: {resultado}')
-    return resultado
-
-
-def obtener_calificaciones(filtros=None):
-    query_matricula = db.session.query(Matricula) \
-        .join(PeriodoLectivo) \
-        .order_by(Matricula.FechaMatricula.desc(), Matricula.Nivel, Matricula.Paralelo)
-    
-    print(filtros)
-    if filtros:       
-        if 'nivel' in filtros:
-            query_matricula = query_matricula.filter(Matricula.Nivel == filtros['nivel'])
-        if 'paralelo' in filtros:
-            query_matricula = query_matricula.filter(Matricula.Paralelo == filtros['paralelo'])
-        
-        print(str(query_matricula.statement))
-        matriculas = query_matricula.all()
-    else:
-        print(str(query_matricula.statement))
-        matriculas = query_matricula.all()
-
-
-    if not matriculas:
-        raise ValueError('No hay matrículas registradas con los filtros proporcionados')
-
-    resultados = []
-
-    for matricula in matriculas:
-        estudiante = matricula.estudiante
-
-        calificaciones = db.session.query(
-            Materia.Nombre.label('materia'),
-            Profesor.Nombre.label('profesor_nombre'),
-            Profesor.Apellido.label('profesor_apellido'),
-            Calificacion
-        ).select_from(MatriculaAsignacion) \
-         .join(AsignacionCurso, AsignacionCurso.idCursoAsignacion == MatriculaAsignacion.idCursoAsignacion) \
-         .join(Materia, Materia.idMateria == AsignacionCurso.idMateria) \
-         .join(Profesor, Profesor.idProfesor == AsignacionCurso.idProfesor) \
-         .outerjoin(Calificacion, Calificacion.idMatriculaAsignacion == MatriculaAsignacion.idMatriculaAsignacion) \
-         .filter(MatriculaAsignacion.idMatricula == matricula.idMatricula) \
-         .all()
-
-        resultado = {
-            'idEstudiante': estudiante.idEstudiante,
-            'cedula': estudiante.Cedula,
-            'nombre': estudiante.Nombre,
-            'apellido': estudiante.Apellido,
-            'fecha_nacimiento': estudiante.FechaNacimiento.strftime('%Y-%m-%d'),
-            'telefono': estudiante.Telefono,
-            'direccion': estudiante.Direccion,
-            'observacion': estudiante.Observacion,
-            'nivel': matricula.Nivel,
-            'paralelo': matricula.Paralelo,
-            'fecha_matricula': matricula.FechaMatricula.strftime('%Y-%m-%d'),
-            'materias': []
-        }
-
-        for materia, profesor_nombre, profesor_apellido, calificacion in calificaciones:
-            if calificacion:
-                resultado['materias'].append({
-                    'idCalificacion': calificacion.idCalificacion,
-                    'idMatriculaAsignacion': calificacion.idMatriculaAsignacion,
-                    'materia': materia,
-                    'profesor': f'{profesor_nombre} {profesor_apellido}',
-                    'notas': {
-                        'primer_quimestre': {
-                            'autonoma': float(calificacion.NotaAutonoma1),
-                            'practica': float(calificacion.NotaPractica1),
-                            'leccion': float(calificacion.NotaLeccion1),
-                            'examen': float(calificacion.NotaExamen1),
-                            'promedio': float(calificacion.PromQuimestre1)
-                        },
-                        'segundo_quimestre': {
-                            'autonoma': float(calificacion.NotaAutonoma2),
-                            'practica': float(calificacion.NotaPractica2),
-                            'leccion': float(calificacion.NotaLeccion2),
-                            'examen': float(calificacion.NotaExamen2),
-                            'promedio': float(calificacion.PromQuimestre2)
-                        },
-                        'final': float(calificacion.PromedioFinal)
-                    }
-                })
-            else:
-                resultado['materias'].append({
-                    'materia': materia,
-                    'profesor': f'{profesor_nombre} {profesor_apellido}',
-                    'notas': 'Sin calificación registrada'
-                })
-
-        resultados.append(resultado)
-
-    return resultados
-
-
-def obtener_matricula_individual(estudiante_id):
-    pass
-
-def obtener_calificaciones_individual(estudiante_matricula):
-    pass
-
+"""

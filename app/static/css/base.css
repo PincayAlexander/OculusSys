@@ -162,10 +162,11 @@ a.btn {
 
 /* SVG */
 .svg-inline {
-  max-width: 3rem;
-  height: auto;
-  display: grid;
-  align-items: center;
+    max-width: 3rem;
+    height: max-content;
+    display: grid;
+    align-items: center;
+    align-content: center;
 }
 
 
