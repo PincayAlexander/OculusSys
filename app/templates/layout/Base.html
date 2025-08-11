@@ -76,10 +76,17 @@
                         data-src="{{ url_for('static', filename='image/icons/notifications.svg') }}"></div>
                 </button>
                 <div class="dropdown__menu dropdown__menu--notifications">
-                    <div class="dropdown__item dropdown__item--notification">🔔 Nueva detección en cámara 1</div>
-                    <div class="dropdown__item dropdown__item--notification">🛠️ Actualización del sistema</div>
-                    <div class="dropdown__item dropdown__item--notification">📊 Nuevo reporte generado</div>
-                    <div class="dropdown__item dropdown__item--notification">👤 Nuevo usuario registrado</div>
+                    <div class="dropdown__menu dropdown__menu--notifications">
+
+                        <div id="notif-list" class="notif__content">
+
+                        </div>
+
+                        <div class="dropdown__divider"></div>
+                        <a href="{{ url_for('notificacion.vista_notificaciones') }}" class="notif__ver-todas">Ver todas
+                            las notificaciones</a>
+                    </div>
+
                 </div>
             </div>
 
@@ -129,6 +136,7 @@
 
     <div id="flash-message" class="flash-container"></div>
     <script>
+        /** @type {Array<[string, string]>} */
         window.flaskMessages = {{ get_flashed_messages(with_categories = true) | tojson }};
     </script>
 
@@ -145,6 +153,7 @@
     <!-- Scripts -->
     {% block scripts %}{% endblock %}
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
 </body>
 
 </html>

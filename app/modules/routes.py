@@ -184,21 +184,48 @@ def vista_notificaciones():
 @login_required
 def get_notificaciones():
     user_id = session.get('userID')
-    notifs = notificacion.query.filter_by(idUsuario=user_id).order_by(notificacion.fecha.desc()).all()
+    limit = request.args.get('limit', type=int)  # None si no viene
+    query = (notificacion.query
+             .filter_by(idUsuario=user_id)
+             .order_by(notificacion.fecha.desc()))
+    
+    if limit:  # solo aplicas si viene
+        query = query.limit(limit)
+    
+    notifs = query.all()
     return jsonify([n.to_dict() for n in notifs])
 
-@notificacion_bp.route('/notificaciones/<int:notif_id>/leido', methods=['POST'])
+
+@notificacion_bp.route('/notificaciones/<notif_id>/leido', methods=['POST'])
 @login_required
 def marcar_notificacion_leida(notif_id):
     user_id = session.get('userID')
+
+    if notif_id == "all":
+        # Marcar todas las no leídas
+        pendientes = notificacion.query.filter_by(idUsuario=user_id, leido=False).all()
+        for notif in pendientes:
+            notif.leido = True
+        if pendientes:
+            db.session.commit()
+            print(f"Todas las notificaciones marcadas como leídas para usuario {user_id}")
+        return '', 204
+
+    # Intentar convertir notif_id a int
+    try:
+        notif_id = int(notif_id)
+    except ValueError:
+        return '', 400
+
     notif = notificacion.query.filter_by(idNotificacion=notif_id, idUsuario=user_id).first()
     if notif:
-        notif.leido = True
-        db.session.commit()
-        print(f"Notificación {notif_id} marcada como leída por usuario {user_id}")
+        if not notif.leido:  # Solo actualizar si no estaba ya leída
+            notif.leido = True
+            db.session.commit()
+            print(f"Notificación {notif_id} marcada como leída por usuario {user_id}")
         return '', 204
-    return '', 404
 
+    return '', 404
 
 # -------------------------
 # RUTAS CAMARA
