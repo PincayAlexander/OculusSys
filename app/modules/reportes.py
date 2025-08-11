@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify, current_app, send_file
+from app.utils import login_required, get_current_user, guardar_notificacions
 from sqlalchemy.exc import SQLAlchemyError
 from app.database import db
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak, Image
@@ -10,6 +11,9 @@ from datetime import datetime
 import io
 import os
 
+# -------------------------
+# RUTAS REPORTES
+# -------------------------
 reporte_bp = Blueprint('reporte', __name__, template_folder='app/templates')
 
 @reporte_bp.route('/document', methods=['GET'])
@@ -20,7 +24,15 @@ def vista_reporte():
 
 
 
+# -------------------------
+# RUTAS DETECCIONES
+# -------------------------
+detecciones_bp = Blueprint('deteccion', __name__, template_folder='app/templates')
 
+@detecciones_bp.route('/detection', methods=['GET'])
+@login_required
+def vista_detecciones():
+    return render_template('deteccion.html')
 
 
 

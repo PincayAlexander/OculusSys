@@ -1,5 +1,5 @@
-from .routes import inicio_bp, usuario_bp, notificacion_bp, detecciones_bp, camara_bp
-from .reportes import reporte_bp
+from .routes import inicio_bp, usuario_bp, notificacion_bp, camara_bp
+from .reportes import reporte_bp, detecciones_bp
 
 all_routes = [
     (usuario_bp, '/app/auth'),

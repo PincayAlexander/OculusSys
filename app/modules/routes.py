@@ -283,14 +283,3 @@ camara_bp = Blueprint('camara', __name__, template_folder='app/templates')
 @login_required
 def vista_camara():
     return render_template('camara.html')
-
-
-# -------------------------
-# RUTAS DETECCIONES
-# -------------------------
-detecciones_bp = Blueprint('deteccion', __name__, template_folder='app/templates')
-
-@detecciones_bp.route('/detection', methods=['GET'])
-@login_required
-def vista_detecciones():
-    return render_template('deteccion.html')
