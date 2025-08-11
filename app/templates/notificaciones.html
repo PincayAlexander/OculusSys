@@ -1,0 +1,25 @@
+{% extends "layout/base.html" %}
+
+{% block title %}Notificaciones - Oculus{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/notificaciones.css') }}">
+{% endblock %}
+
+{% block content %}
+<h2>Notificaciones</h2>
+<div class="notificaciones__page">
+    <section class="notificaciones__resumen">
+        <div id="notifResumen" class="notificaciones__resumen--lista"></div>
+    </section>
+
+    <section class="notificaciones__detalle">
+        <div id="notifDetalle" class="notificaciones__detalle--contenido">
+            <span> Seleccione una notificación para verificar sus detalles</span>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

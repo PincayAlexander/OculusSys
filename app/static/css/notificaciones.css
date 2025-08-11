@@ -1,0 +1,141 @@
+/* ===== NOTIFICACIONES PAGE ===== */
+.notificaciones__page {
+  width: 100%;
+  height: calc(100vh - 11rem);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: .8rem;
+}
+
+.notificaciones__resumen {
+  padding: .8rem;
+  width: 20%;
+}
+
+.notificaciones__detalle {
+  border-left: 2px solid var(--gris);
+  padding: .8rem;
+  width: 75%;
+}
+
+.notificaciones__detalle--contenido {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.notificaciones__detalle--contenido span {
+  color: var(--gris);
+  font-size: var(--text-lg);
+  text-align: center;
+}
+
+.notificaciones__detalle--texto {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  margin-left: .8rem;
+  margin-top: 2rem;
+}
+
+
+
+.notificaciones__detalle--contenido .contenido-resaltado {
+  font-weight: 600;
+  color: var(--negro);
+}
+
+.notificaciones__detalle--header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0.8rem 0 .8rem;
+  border-bottom: 1px solid var(--gris);
+
+}
+
+.notificaciones__detalle--header h3 {
+  margin: 0;
+}
+
+.notificaciones__detalle--header .header-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Lista de notificaciones */
+.notificaciones__resumen--lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.notificacion__item {
+  color: var(--negro);
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid var(--gris);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notificacion__item:hover {
+  background-color: var(--gris-claro);
+}
+
+.notificacion__item .notificacion--leida {
+  opacity: 0.6;
+  border-left-color: var(--gris, #bbb);
+}
+
+.notificacion--leida .notificacion__resumen--titulo {
+  text-decoration: line-through;
+}
+
+.notificacion__resumen--content {
+  flex: 1;
+}
+
+.notificacion__resumen--titulo {
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.notificacion__resumen--fecha {
+  font-size: 0.85rem;
+  color: var(--gris, #666);
+}
+
+
+.notificacion__resumen--buttons {
+  display: flex;
+  gap: 0.5rem;
+  width: fit-content;
+}
+
+.btn__notif__borrar,
+.btn__notif__leido,
+.btn__notif__noLeido {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--verde);
+  font-size: 1.2em;
+  transition: all 0.2s ease;
+}
+
+.btn__notif__borrar {
+  color: var(--rojo);
+}
+
+.btn__notif__borrar:hover,
+.btn__notif__leido:hover,
+.btn__notif__leido:hover {
+  color: var(--negro);
+}

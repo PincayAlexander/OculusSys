@@ -74,18 +74,31 @@
                 <button class="nav__notifications-button dropdown__toggle">
                     <div class="nav__notifications-icon svg-inline"
                         data-src="{{ url_for('static', filename='image/icons/notifications.svg') }}"></div>
+                        <span class="notif__badge" id="notifBadge"></span>
                 </button>
-                <div class="dropdown__menu dropdown__menu--notifications">
-                    <div class="dropdown__menu dropdown__menu--notifications">
-
-                        <div id="notif-list" class="notif__content">
-
+                <div class="dropdown__menu">
+                    <div class="dropdown__header">
+                        <h6>Notificaciones</h6>
+                        <div class="dropdown__header--buttons">
+                        <button class="notif__mark-all" title="Marcar todo como leído" onclick="markAllAsRead()">
+                            <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/tasks.svg') }}"></div>
+                        </button>
+                        <a class="notif__manage" title="Administrar todas las notificaciones" href="{{url_for('notificacion.vista_notificaciones')}}">
+                            <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/edit.svg') }}"></div>
+                        </a>                            
                         </div>
 
-                        <div class="dropdown__divider"></div>
-                        <a href="{{ url_for('notificacion.vista_notificaciones') }}" class="notif__ver-todas">Ver todas
-                            las notificaciones</a>
                     </div>
+                    <div class="dropdown__menu--notifications">
+                        <div class="dropdown__menu dropdown__menu--notifications">
+
+                            <div class="dropdown__divider"></div>
+                            <a href="{{ url_for('notificacion.vista_notificaciones') }}" class="notif__ver-todas">Ver
+                                todas
+                                las notificaciones</a>
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
@@ -97,7 +110,7 @@
                         class="nav__user-avatar">
                 </button>
                 <div class="dropdown__menu dropdown__menu--user">
-                    <div class="dropdown__header">{{ session['username'] }}</div>
+                    <div class="dropdown__header"><h6>{{ session['username'] }}</h6></div>
                     <div class="dropdown__divider"></div>
                     <div class="dropdown__item">
                         <a href="{{url_for('auth.vista_perfil')}}" class="dropdown__item--link">

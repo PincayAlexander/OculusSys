@@ -1,4 +1,5 @@
 /* Hero section */
+.hero--inicio,
 .hero {
   flex: 1;
   display: flex;
@@ -7,12 +8,15 @@
   align-items: center;
   text-align: center;
   padding: 0 1.25rem;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
-    url('/static/image/background/index.jpeg');
   background-size: cover;
   background-position: center;
   min-height: 100%;
+}
+
+.hero {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+    url('/static/image/background/index.jpeg');
 }
 
 @supports (background-image: url('/static/image/background/index.webp')) {
@@ -22,6 +26,21 @@
             url('/static/image/background/index.webp');
     }
 }
+
+.hero--inicio {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+    url('/static/image/background/inicio.jpeg');
+}
+
+@supports (background-image: url('/static/image/background/index.webp')) {
+    .hero--inicio {
+        background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+            url('/static/image/background/inicio.webp');
+    }
+}
+
 
 .hero__logo {
   height: 5rem;

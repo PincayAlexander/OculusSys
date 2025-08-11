@@ -227,6 +227,53 @@ def marcar_notificacion_leida(notif_id):
 
     return '', 404
 
+@notificacion_bp.route('/notificaciones/<notif_id>/no-leido', methods=['POST'])
+@login_required
+def marcar_notificacion_no_leida(notif_id):
+    user_id = session.get('userID')
+
+    try:
+        notif_id = int(notif_id)
+    except ValueError:
+        return '', 400
+
+    notif = notificacion.query.filter_by(idNotificacion=notif_id, idUsuario=user_id).first()
+    if notif:
+        if notif.leido:  # Solo actualizar si estaba leída
+            notif.leido = False
+            db.session.commit()
+            print(f"Notificación {notif_id} marcada como NO leída por usuario {user_id}")
+        return '', 204
+
+    return '', 404
+
+
+@notificacion_bp.route('/notificaciones/<notif_id>/delete', methods=['DELETE'])
+@login_required
+def borrar_notificacion(notif_id):
+    user_id = session.get('userID')
+
+    if notif_id == "all":
+        notifs = notificacion.query.filter_by(idUsuario=user_id).all()
+        for n in notifs:
+            db.session.delete(n)
+        db.session.commit()
+        return '', 204
+
+    try:
+        notif_id = int(notif_id)
+    except ValueError:
+        return '', 400
+
+    notif = notificacion.query.filter_by(idNotificacion=notif_id, idUsuario=user_id).first()
+    if notif:
+        db.session.delete(notif)
+        db.session.commit()
+        return '', 204
+
+    return '', 404
+
+
 # -------------------------
 # RUTAS CAMARA
 # -------------------------

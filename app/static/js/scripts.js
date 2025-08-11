@@ -1,55 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Cargar SVGs iniciales
-  const svgContainers = document.querySelectorAll('.svg-inline[data-src]');
-
-  svgContainers.forEach(container => {
-    loadSVG(container);
-
-    // Si es un toggle de contraseña, añadir los event listeners
-    if (container.classList.contains('password__toggle')) {
-      setupPasswordToggle(container);
-    }
-  });
-
-  // FLASH MESSAGES
-  if (Array.isArray(window.flaskMessages)) {
-    window.flaskMessages.forEach(([category, message]) => {
-      console.log(message);
-      mostrarFlashMensaje(message, category);
-    });
-  }
-
-  // Selecciona todos los dropdowns
-  const dropdowns = document.querySelectorAll(".dropdown");
-
-  dropdowns.forEach(dropdown => {
-    const toggle = dropdown.querySelector(".dropdown__toggle");
-    const menu = dropdown.querySelector(".dropdown__menu");
-
-    toggle.addEventListener("click", (e) => {
-      e.stopPropagation(); // evita que se cierre inmediatamente
-
-      // Cierra otros dropdowns abiertos
-      document.querySelectorAll(".dropdown__menu").forEach(m => {
-        if (m !== menu) {
-          m.classList.remove("show");
-        }
-      });
-
-      // Alternar visibilidad del dropdown actual
-      menu.classList.toggle("show");
-    });
-  });
-
-  // Cierra dropdowns si haces clic fuera
-  document.addEventListener("click", () => {
-    document.querySelectorAll(".dropdown__menu").forEach(menu => {
-      menu.classList.remove("show");
-    });
-  });
-
-});
-
 // Función para cargar SVGs
 function loadSVG(container) {
   const src = container.getAttribute('data-src');
@@ -146,3 +94,158 @@ function cerrarAlert(boton) {
     alerta.remove();
   }
 }
+
+async function cargarNotificaciones() {
+  try {
+    const res = await fetch('/app/notificaciones/get_user_notification/?limit=10');
+    if (!res.ok) throw new Error("Error al obtener notificaciones");
+    const notificaciones = await res.json();
+
+    // Actualizar badge
+    const unreadCount = notificaciones.filter(n => !n.leido).length;
+    const badge = document.getElementById('notifBadge');
+    if (badge) {
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.style.display = 'inline';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    const menu = document.querySelector('.dropdown__menu--notifications');
+    if (!menu) return;
+
+    menu.innerHTML = ''; // limpiar contenido anterior
+
+    notificaciones.forEach(notif => {
+      let icono = getIcono(notif.tipo);
+
+      const fecha = formatFecha(notif.fecha);
+
+      const item = document.createElement('div');
+      item.classList.add('dropdown__item', 'dropdown__item--notification');
+      if (notif.leido) item.classList.add('notificacion--leida');
+
+      item.innerHTML = `
+        <div class="notif__content">
+          <div class="notif__title">${icono} ${notif.titulo}</div>
+          <div class="notif__fecha">${fecha}</div>
+        </div>
+        ${!notif.leido ? `<button class="notif__leido-btn" title="Marcar como leído" onclick="markAsRead(${notif.idNotificacion})">✔</button>` : ''} `;
+
+      menu.appendChild(item);
+    });
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function markAsRead(id) {
+  fetch(`/app/notificaciones/notificaciones/${id}/leido`, { method: 'POST' })
+    .then(res => {
+      if (res.status === 204) {
+        const notifElem = document.querySelector(`button[onclick="markAsRead(${id})"]`).closest('.dropdown__item');
+        notifElem.classList.add('notificacion--leida');
+        const btn = notifElem.querySelector('.notif__leido-btn');
+        if (btn) btn.remove();
+
+        cargarNotificaciones();
+      }
+    });
+}
+
+
+function markAllAsRead() {
+  fetch(`/app/notificaciones/notificaciones/all/leido`, { method: 'POST' })
+    .then(res => {
+      if (res.status === 204) {
+        document.querySelectorAll('.dropdown__item--notification').forEach(el => {
+          el.classList.add('notificacion--leida');
+          const btn = el.querySelector('.notif__leido-btn');
+          if (btn) btn.remove();
+        });
+
+        cargarNotificaciones();
+      }
+    });
+
+}
+
+function getIcono(tipo) {
+    switch (tipo) {
+        case 'info': return '🔔';
+        case 'warning': return '📊';
+        case 'error': return '❓';
+        case 'success': return '✅';
+        default: return '📌';
+    }
+}
+
+function formatFecha(fechaStr) {
+    return new Date(fechaStr).toLocaleString('es-EC', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Cargar SVGs iniciales
+  const svgContainers = document.querySelectorAll('.svg-inline[data-src]');
+
+  svgContainers.forEach(container => {
+    loadSVG(container);
+
+    // Si es un toggle de contraseña, añadir los event listeners
+    if (container.classList.contains('password__toggle')) {
+      setupPasswordToggle(container);
+    }
+  });
+
+  // FLASH MESSAGES
+  if (Array.isArray(window.flaskMessages)) {
+    window.flaskMessages.forEach(([category, message]) => {
+      console.log(message);
+      mostrarFlashMensaje(message, category);
+    });
+  }
+
+  // Selecciona todos los dropdowns
+  const dropdowns = document.querySelectorAll(".dropdown");
+
+  dropdowns.forEach(dropdown => {
+    const toggle = dropdown.querySelector(".dropdown__toggle");
+    const menu = dropdown.querySelector(".dropdown__menu");
+
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation(); // evita que se cierre inmediatamente
+
+      // Cierra otros dropdowns abiertos
+      document.querySelectorAll(".dropdown__menu").forEach(m => {
+        if (m !== menu) {
+          m.classList.remove("show");
+        }
+      });
+
+      // Alternar visibilidad del dropdown actual
+      menu.classList.toggle("show");
+    });
+  });
+
+  // Cierra dropdowns si haces clic fuera
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".dropdown__menu").forEach(menu => {
+      menu.classList.remove("show");
+    });
+  });
+
+  // Cargar notificaciones
+  cargarNotificaciones();
+
+  const notifButton = document.querySelector('.nav__notifications-button');
+  if (notifButton) {
+    notifButton.addEventListener('click', cargarNotificaciones);
+  }
+
+});

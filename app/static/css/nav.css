@@ -99,6 +99,7 @@
   border: none;
   cursor: pointer;
   padding: 0.5rem;
+  position: relative;
 }
 
 .nav__notifications-icon {
@@ -165,6 +166,19 @@
   overflow-y: auto;
 }
 
+.notif__badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  background-color: var(--rojo);
+  color: var(--blanco);
+  border-radius: 100%;
+  padding: .15rem .45rem;
+  font-size: var(--text-xs);
+  font-weight: bold;
+  display: none;
+}
+
 .notif__content {
   display: flex;
   flex-direction: column;
@@ -179,6 +193,8 @@
   color: var(--gris);
 }
 
+.notif__mark-all,
+.notif__manage,
 .notif__leido-btn {
   margin-left: auto;
   background: transparent;
@@ -186,7 +202,15 @@
   cursor: pointer;
   color: var(--verde);
   font-size: 1.2em;
+  transition: all 0.2s ease;
 }
+
+.notif__mark-all:hover,
+.notif__manage:hover,
+.notif__leido-btn:hover {
+  color: var(--negro);
+}
+
 
 .notificacion--leida {
   opacity: 0.6;
@@ -209,6 +233,20 @@
   font-size: 1rem;
   color: var(--verde);
   text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown__header h6 {
+  margin: 0;
+}
+
+.dropdown__header--buttons {
+  display: flex;
+  gap: 0.5rem;
+  width: fit-content;
 }
 
 .dropdown__divider {
@@ -218,7 +256,6 @@
 }
 
 .dropdown__item {
-  padding: 0.5rem 1rem;
   color: var(--negro);
   transition: background-color 0.2s ease;
 }
@@ -241,45 +278,6 @@
   border-bottom: none;
 }
 
-.sticky-header {
-    position: sticky;
-    top: 0;
-    background: var(--blanco);
-    padding: 0.5rem 1rem;
-    z-index: 10;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.notif__mark-all {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--verde);
-    font-size: 1.2em;
-}
-
-.notif__mark-all:disabled {
-    opacity: 0.4;
-    cursor: default;
-}
-
-.notif__ver-todas {
-    display: block;
-    text-align: center;
-    padding: 0.5rem;
-    background-color: var(--gris-claro);
-    text-decoration: none;
-    font-weight: bold;
-    color: var(--verde);
-}
-
-.notif__ver-todas:hover {
-    background-color: var(--gris);
-}
-
-
 .dropdown__item--link {
   display: flex;
   flex-direction: row;
@@ -288,6 +286,7 @@
   color: inherit;
   width: 100%;
   gap: .25rem;
+  padding: 0.5rem 1rem;
 }
 
 .dropdown__item--link .svg-inline svg {
