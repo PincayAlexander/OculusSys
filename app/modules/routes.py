@@ -1,9 +1,13 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
 from app.utils import login_required, get_current_user, guardar_notificacion
 from app.database import db
-from app.database.models import usuario, notificacion
+from app.database.models import usuario, notificacion, camara, deteccionPlaga, tipoPlaga, ubicacion
 from passlib.hash import scrypt
 import re
+import os
+import base64
+from datetime import datetime
+import requests
 
 # -------------------------
 # RUTAS INICIO
@@ -56,7 +60,7 @@ def autenticar_usuario():
 
     guardar_notificacion(user.idUsuario, "Inicio de sesión", "info", f"Usuario {user.username} inició sesión correctamente.")
 
-    flash(f"Bienvenido, {user.first_name}!", "success")
+    flash(f"Bienvenido, {user.username}!", "success")
     return redirect(url_for('inicio.menu_inicio'))
 
 @usuario_bp.route('/logOut', methods=['GET'])
@@ -283,3 +287,109 @@ camara_bp = Blueprint('camara', __name__, template_folder='app/templates')
 @login_required
 def vista_camara():
     return render_template('camara.html')
+
+@camara_bp.route('/registrar_camara', methods=['POST'])
+@login_required
+def registrar_camara():
+    nombre = request.form.get('nombre')
+    ubicacion = request.form.get('ubicacion')
+    url_camara = request.form.get('url')
+
+    if not nombre or not url_camara:
+        flash("El nombre y la URL de la cámara son obligatorios", "error")
+        return redirect(url_for('camara.vista_camara'))
+
+    try:
+        nueva_camara = camara(
+            nombre=nombre,
+            ubicacion_fisica=ubicacion,
+            url=url_camara,
+            idUsuario=session['userID']
+        )
+        db.session.add(nueva_camara)
+        db.session.commit()
+
+        guardar_notificacion(session['userID'], "Registro de cámara", "success",
+                              f"Cámara '{nombre}' registrada correctamente.")
+        flash("Cámara registrada correctamente", "success")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error al registrar cámara: {e}")
+        flash("Error al registrar la cámara", "error")
+
+    return redirect(url_for('camara.vista_camara'))
+
+# Listar cámaras del usuario
+@camara_bp.route('/listar_camara', methods=['GET'])
+@login_required
+def listar_camaras():
+    camaras = camara.query.filter_by(idUsuario=session['userID']).all()
+    return jsonify([{
+        'id': c.idCamara,
+        'nombre': c.nombre,
+        'url': c.url,
+        'ubicacion': c.ubicacion_fisica,
+    } for c in camaras])
+
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+# Guardar foto
+@camara_bp.route('/guardar_foto/<int:idCamara>', methods=['POST'])
+@login_required
+def guardar_foto(idCamara):
+    print(f"Guardando foto para cámara {idCamara}")
+    data = request.get_json()
+    imagen_b64 = data.get('imagen', '').split(',')[1]
+    img_bytes = base64.b64decode(imagen_b64)
+
+    folder = os.path.join(BASE_DIR, 'static', 'capturas')
+    os.makedirs(folder, exist_ok=True)
+
+    filename = f"{idCamara}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+    path = os.path.join(folder, filename)
+    
+    print("Guardando en:", os.path.abspath(path))
+        
+    with open(path, 'wb') as f:
+        f.write(img_bytes)
+
+
+    return jsonify({'status': 'ok', 'filename': filename})
+
+zoom_states = {}
+
+@camara_bp.route('/control_camara/<int:idCamara>', methods=['POST'])
+@login_required
+def control_camara(idCamara):
+    data = request.get_json()
+    accion = data.get('accion')
+
+    camara_obj = camara.query.get(idCamara)
+    if not camara_obj:
+        return jsonify({"error": "Cámara no encontrada"}), 404
+
+    ip_url = camara_obj.url
+    # Extraemos IP y puerto de la url
+    from urllib.parse import urlparse
+    parsed = urlparse(ip_url)
+    base_url = f"{parsed.scheme}://{parsed.netloc}"  # http://192.168.100.42:8000
+
+    current_zoom = zoom_states.get(idCamara, 0)
+
+    if accion == "zoomIn":
+        current_zoom = min(100, current_zoom + 10)
+    elif accion == "zoomOut":
+        current_zoom = max(0, current_zoom - 10)
+    else:
+        return jsonify({"error": "Acción inválida"}), 400
+
+    zoom_states[idCamara] = current_zoom
+
+    try:
+        r = requests.get(f"{base_url}/ptz?zoom={current_zoom}", timeout=2)
+        r.raise_for_status()
+    except Exception as e:
+        return jsonify({"error": f"No se pudo controlar la cámara: {e}"}), 500
+
+    return jsonify({"status": "ok", "zoom": current_zoom})

@@ -43,4 +43,9 @@ def create_app(config=None) -> Flask:
     for rule in app.url_map.iter_rules():
         print(f" * Endpoint: {rule.endpoint} -> URL: {rule}")
     
+    
+    #from .datosPrueba import generar_datos_prueba
+    #with app.app_context():
+    #    generar_datos_prueba()
+    
     return app

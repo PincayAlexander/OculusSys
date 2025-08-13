@@ -1,0 +1,98 @@
+/*----------------------------Filtros-------------------------*/
+/* Bloque principal */
+.filtros {
+  min-width: 14dvw;
+  max-width: 16dvw;
+  height: fit-content;
+  background-color: var(--blanco);
+  box-shadow: var(--shadow-md);
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gris-claro);
+}
+
+/* Elementos del bloque */
+.filtro__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: .5rem;
+}
+
+.filtro__header h4 {
+  margin: 0;
+}
+
+.filtro__header .svg-src svg {
+  height: 1.5rem;
+}
+
+.filtros__grupo {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.filtros__etiqueta {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--negro);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.filtros__select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  height: 2.5rem;
+  border: 2px solid var(--negro);
+  border-radius: var(--radius-md);
+  background-color: var(--blanco);
+  font-size: var(--text-sm);
+  color: var(--negro);
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+}
+
+.filtros__select:focus {
+  outline: none;
+  border-color: var(--verde);
+  box-shadow: 0 0 0 2px rgba(0, 177, 121, 0.2);
+}
+
+/* Modificadores */
+.filtros--compacto {
+  width: 12rem;
+  padding: 0.75rem;
+}
+
+.filtros--compacto .filtros__titulo {
+  font-size: var(--text-lg);
+}
+
+.filtros--compacto .filtros__select {
+  padding: 0.375rem 0.625rem;
+  height: 2rem;
+  font-size: var(--text-xs);
+}
+
+/* Estados */
+.filtros__grupo--error .filtros__select {
+  border-color: var(--rojo);
+}
+
+.filtros__grupo--error .filtros__etiqueta {
+  color: var(--rojo);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filtros {
+    width: 100%;
+    margin: 0 0 1rem 0;
+  }
+}

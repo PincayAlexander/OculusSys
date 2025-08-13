@@ -70,7 +70,7 @@
   padding: .5rem 1rem;
 }
 
-.nav__menu--link .svg-inline svg {
+.nav__menu--link .svg-src svg {
   height: .95rem;
   width: auto;
   color: currentColor;
@@ -289,7 +289,7 @@
   padding: 0.5rem 1rem;
 }
 
-.dropdown__item--link .svg-inline svg {
+.dropdown__item--link .svg-src svg {
   height: 1.1rem;
   width: auto;
   color: currentColor;

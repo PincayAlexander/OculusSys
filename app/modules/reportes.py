@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify, current_app, send_file
-from app.utils import login_required, get_current_user, guardar_notificacions
+from app.utils import login_required, get_current_user, guardar_notificacion
 from sqlalchemy.exc import SQLAlchemyError
 from app.database import db
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak, Image

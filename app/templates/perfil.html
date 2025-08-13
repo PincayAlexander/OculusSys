@@ -9,14 +9,14 @@
 {% block content %}
 <div class="forms profile__forms">
   <div class="profile__header">
-    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/account.svg') }}"></div>
+    <div class="svg-src" data-src="account"></div>
     <h2>Mi Perfil</h2>
   </div>
 
   <div class="profile__avatar">
     <img src="{{ url_for('static', filename='image/other/profile.png') }}" alt="Avatar">
     <div class="profile__info">
-      <p class="profile__username">{{ usuario.first_name }}  {{ usuario.last_name }}</p>
+      <p class="profile__username">{{ usuario.first_name }} {{ usuario.last_name }}</p>
       <p class="profile__email">{{ usuario.email }}</p>
     </div>
   </div>
@@ -56,16 +56,12 @@
       <div class="forms__group halft">
         <input type="password" name="password" id="password" class="forms__input--text" placeholder=" " minlength="8">
         <label for="password" class="forms__label">Nueva contraseña</label>
-        <div class="svg-inline password__toggle"
-          data-src="{{ url_for('static', filename='image/icons/visibility_off.svg') }}" role="button" tabindex="0">
-        </div>
+        <div class="svg-src password__toggle" data-src="visibility_off" role="button" tabindex="0"></div>
       </div>
       <div class="forms__group halft">
         <input type="password" name="confirm_password" id="confirm_password" class="forms__input--text" placeholder=" ">
         <label for="confirm_password" class="forms__label">Confirmar contraseña</label>
-        <div class="svg-inline password__toggle"
-          data-src="{{ url_for('static', filename='image/icons/visibility_off.svg') }}" role="button" tabindex="0">
-        </div>
+        <div class="svg-src password__toggle" data-src="visibility_off" role="button" tabindex="0"></div>
       </div>
     </div>
 

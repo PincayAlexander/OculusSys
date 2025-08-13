@@ -25,7 +25,7 @@
         <!-- Logo -->
         <div class="nav__logo">
             <a href="{{ url_for('index') }}" class="nav__logo--link">
-                <div class="svg-inline" rel="preload" data-src="{{ url_for('static', filename='image/logo.svg') }}">
+                <div class="svg-src" data-src="logo">
                 </div>
                 <span> Oculus </span>
             </a>
@@ -35,33 +35,33 @@
         <ul class="nav__menu">
             <li class="nav__menu--item">
                 <a href="{{url_for('inicio.menu_inicio')}}" class="nav__menu--link">
-                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/inicio.svg') }}"></div>
+                    <div class="svg-src" data-src="inicio"></div>
                     Inicio
                 </a>
             </li>
             <li class="nav__menu--item">
                 <a href="{{url_for('reporte.vista_reporte') }}" class="nav__menu--link">
-                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/reporte.svg') }}">
+                    <div class="svg-src" data-src="reporte">
                     </div>
                     Reportes
                 </a>
             </li>
             <li class="nav__menu--item">
                 <a href="{{ url_for('camara.vista_camara') }}" class="nav__menu--link">
-                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/camara.svg') }}"></div>
+                    <div class="svg-src" data-src="camara"></div>
                     Cámaras
                 </a>
             </li>
             <li class="nav__menu--item">
                 <a href="{{ url_for('deteccion.vista_detecciones') }}" class="nav__menu--link">
-                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/deteccion.svg') }}">
+                    <div class="svg-src" data-src="deteccion">
                     </div>
                     Detecciones
                 </a>
             </li>
             <li class="nav__menu--item">
                 <a href="#" class="nav__menu--link">
-                    <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/ajuste.svg') }}"></div>
+                    <div class="svg-src" data-src="ajuste"></div>
                     Ajustes
                 </a>
             </li>
@@ -72,8 +72,8 @@
             <!-- Notificaciones -->
             <div class="nav__notifications dropdown">
                 <button class="nav__notifications-button dropdown__toggle">
-                    <div class="nav__notifications-icon svg-inline"
-                        data-src="{{ url_for('static', filename='image/icons/notifications.svg') }}"></div>
+                    <div class="nav__notifications-icon svg-src"
+                        data-src="notifications"></div>
                         <span class="notif__badge" id="notifBadge"></span>
                 </button>
                 <div class="dropdown__menu">
@@ -81,10 +81,10 @@
                         <h6>Notificaciones</h6>
                         <div class="dropdown__header--buttons">
                         <button class="notif__mark-all" title="Marcar todo como leído" onclick="markAllAsRead()">
-                            <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/tasks.svg') }}"></div>
+                            <div class="svg-src" data-src="tasks"></div>
                         </button>
                         <a class="notif__manage" title="Administrar todas las notificaciones" href="{{url_for('notificacion.vista_notificaciones')}}">
-                            <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/edit.svg') }}"></div>
+                            <div class="svg-src" data-src="edit"></div>
                         </a>                            
                         </div>
 
@@ -114,22 +114,20 @@
                     <div class="dropdown__divider"></div>
                     <div class="dropdown__item">
                         <a href="{{url_for('auth.vista_perfil')}}" class="dropdown__item--link">
-                            <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/user.svg') }}">
+                            <div class="svg-src" data-src="user">
                             </div>
                             Personalizar Perfil
                         </a>
                     </div>
                     <div class="dropdown__item">
                         <a href="#" class="dropdown__item--link">
-                            <div class="svg-inline"
-                                data-src="{{ url_for('static', filename='image/icons/password.svg') }}"></div>
+                            <div class="svg-src" data-src="password"></div>
                             Cambiar Contraseña
                         </a>
                     </div>
                     <div class="dropdown__item">
                         <a href="#" class="dropdown__item--link">
-                            <div class="svg-inline"
-                                data-src="{{ url_for('static', filename='image/icons/ayuda.svg') }}"></div>
+                            <div class="svg-src" data-src="ayuda"></div>
                             Ayuda
                         </a>
                     </div>
@@ -137,8 +135,7 @@
                     <div class="dropdown__item">
                         <a href="{{ url_for('auth.cerrar_sesion') }}"
                             class="dropdown__item--link dropdown__link--danger">
-                            <div class="svg-inline"
-                                data-src="{{ url_for('static', filename='image/icons/logout.svg') }}"></div>
+                            <div class="svg-src" data-src="logout"></div>
                             Cerrar sesión
                         </a>
                     </div>
@@ -166,7 +163,6 @@
     <!-- Scripts -->
     {% block scripts %}{% endblock %}
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
 </body>
 
 </html>

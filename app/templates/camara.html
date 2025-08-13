@@ -3,92 +3,91 @@
 {% block title %}Monitoreo en Tiempo Real{% endblock %}
 
 {% block stylesheets %}
-  <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/camara.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filtros.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 {% endblock %}
 
 {% block content %}
+<h2>Monitoreo en Tiempo Real</h2>
 
-
-<main class="flex">
+<div class="camara__container">
 
   <!-- Filtro lateral -->
-<aside class="w-60 bg-white shadow-md p-4 m-4 rounded">
-  <h2 class="font-bold mb-4 text-lg">Filtros</h2>
-
-  <!-- Filtro de Parcelas -->
-  <label for="filtroParcelas" class="block text-sm mb-1">Parcela</label>
-  <select id="filtroParcelas" class="w-full px-3 py-2 border rounded mb-4">
-    <option value="todas">Todas</option>
-    <option value="parcela-a">Parcela A</option>
-    <option value="parcela-b">Parcela B</option>
-    <option value="parcela-c">Parcela C</option>
-  </select>
-
-  <!-- Filtro de Áreas -->
-  <label for="filtroAreas" class="block text-sm mb-1">Área</label>
-  <select id="filtroAreas" class="w-full px-3 py-2 border rounded">
-    <option value="todas">Todas</option>
-    <option value="area-1">Área 1</option>
-    <option value="area-2">Área 2</option>
-    <option value="area-3">Área 3</option>
-  </select>
-</aside>
-
-  <!-- Contenido -->
-  <section class="flex-1 grid grid-cols-2 gap-6 p-4">
-    <h1 class="col-span-2 text-3xl font-bold italic">MONITOREO EN TIEMPO REAL</h1>
-
-    <!-- Tarjetas con video -->
-    <div class="bg-white rounded shadow p-4">
-      <div class="flex items-center gap-2 mb-2">
-        <img src="https://img.icons8.com/ios-filled/20/fa314a/video.png" />
-        <h2 class="font-bold">ÁREA DE CULTIVO S1-A001</h2>
-      </div>
-      <video id="cam1" autoplay muted class="w-full rounded mb-2"></video>
-      <button onclick="ampliarVista('cam1')" class="bg-green-600 text-white px-3 py-1 rounded text-sm">Vista Ampliada</button>
+  <aside class="filtros">
+    <div class="filtro__header">
+      <div class="svg-src" data-src="filter"></div>
+      <h4>Filtros</h4>
     </div>
 
-    <div class="bg-white rounded shadow p-4">
-      <div class="flex items-center gap-2 mb-2">
-        <img src="https://img.icons8.com/ios-filled/20/fa314a/video.png" />
-        <h2 class="font-bold">ÁREA DE CULTIVO S1-A002</h2>
-      </div>
-      <video id="cam2" autoplay muted class="w-full rounded mb-2"></video>
-      <button onclick="ampliarVista('cam2')" class="bg-green-600 text-white px-3 py-1 rounded text-sm">Vista Ampliada</button>
+    <!-- Filtro de Parcelas -->
+    <div class="filtros__grupo">
+      <label for="filtroParcelas" class="filtros__etiqueta">Parcela</label>
+      <select id="filtroParcelas" class="filtros__select">
+        <option value="todas">Todas</option>
+        <option value="parcela-a">Parcela A</option>
+        <option value="parcela-b">Parcela B</option>
+        <option value="parcela-c">Parcela C</option>
+      </select>
     </div>
 
-    <!-- Puedes duplicar más si quieres más cámaras -->
-  </section>
-</main>
+    <!-- Filtro de Áreas -->
+    <div class="filtros__grupo">
+      <label for="filtroAreas" class="filtros__etiqueta">Área</label>
+      <select id="filtroAreas" class="filtros__select">
+        <option value="todas">Todas</option>
+        <option value="area-1">Área 1</option>
+        <option value="area-2">Área 2</option>
+        <option value="area-3">Área 3</option>
+      </select>
+    </div>
+  </aside>
+
+  <!-- Modal de registro de camara -->
+  <div id="modalRegistroCamara" class="modal__background" aria-hidden="true">
+    <div class="modal">
+      <button class="modal__close" onclick="cerrarModal('modalRegistroCamara')">✖</button>
+      <h4>Registrar nueva cámara</h4>
+      <form action="{{ url_for('camara.registrar_camara') }}" method="POST">
+        <div class="modal__group">
+          <input class="modal__input" type="text" name="nombre" placeholder=" " required>
+          <label class="modal__label">Nombre</label>
+        </div>
+        <div class="modal__group">
+          <input class="modal__input" type="text" name="ubicacion" placeholder=" ">
+          <label class="modal__label">Ubicación</label>
+        </div>
+        <div class="modal__group">
+          <input class="modal__input" type="text" name="url" placeholder=" " required>
+          <label class="modal__label">URL de la Cámara</label>
+        </div>
+        <div class="modal__footer">
+          <button type="submit" class="btn btn__primary">Registrar</button>
+          <button type="button" class="btn btn__secondary"
+            onclick="cerrarModal('modalRegistroCamara')">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="camaras">
+    <div class="camara__header">
+      <button class="btn btn__primary" onclick="abrirModal('modalRegistroCamara')">
+        <div class="svg-src" data-src="añadir"></div> 
+        Registrar nueva cámara
+      </button>
+    </div>
+    <!-- Contenido -->
+    <section id="listaCamaras" class="contenedor__camaras">
+      <!-- camaras.js -->
+    </section>
+
+  </div>
+
+</div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-  async function startCamera(videoId) {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      const video = document.getElementById(videoId);
-      if (video) {
-        video.srcObject = stream;
-      }
-    } catch (error) {
-      alert("No se pudo acceder a la cámara: " + error.message);
-    }
-  }
-
-  function ampliarVista(videoId) {
-    const video = document.getElementById(videoId);
-    if (video.requestFullscreen) {
-      video.requestFullscreen();
-    } else if (video.webkitRequestFullscreen) {
-      video.webkitRequestFullscreen(); // Safari
-    } else if (video.msRequestFullscreen) {
-      video.msRequestFullscreen(); // IE11
-    }
-  }
-
-  // Iniciar cámaras
-  startCamera('cam1');
-  startCamera('cam2');
-</script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/camaras.js') }}"></script>
 {% endblock %}

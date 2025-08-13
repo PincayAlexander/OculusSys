@@ -58,8 +58,8 @@
   max-width: 50rem;
 }
 
-.hero .svg-inline {
-  max-width: 14rem;
+.hero .svg-src {
+  max-width: 15rem;
   height: auto;
 }
 

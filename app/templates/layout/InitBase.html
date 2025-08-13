@@ -21,7 +21,7 @@
   <nav class="navInit">
     <div class="navInit__logo">
       <a href="{{ url_for('index') }}" class="navInit__logo--link">
-        <div class="svg-inline" data-src="{{ url_for('static', filename='image/logo.svg') }}"></div>
+        <div class="svg-src" data-src="logo"></div>
         <span> Oculus </span>
       </a>
     </div>
@@ -32,10 +32,10 @@
   </nav>
 
   <div id="flash-message" class="flash-container"></div>
-    <script>
-        /** @type {Array<[string, string]>} */
-        window.flaskMessages = {{ get_flashed_messages(with_categories = true) | tojson }};
-    </script>
+  <script>
+    /** @type {Array<[string, string]>} */
+    window.flaskMessages = {{ get_flashed_messages(with_categories = true) | tojson }};
+  </script>
 
   <!-- Contenido -->
   <div class="containerInit">

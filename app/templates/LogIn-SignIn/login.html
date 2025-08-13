@@ -11,7 +11,7 @@
     <div class="forms login__form">
 
         <div class="forms__header">
-            <div class="svg-inline" data-src="{{ url_for('static', filename='image/logo.svg') }}" ></div>
+            <div class="svg-src" data-src="logo" ></div>
             <h2 class="forms__title">Sistema de Monitoreo</h2>
         </div>
 
@@ -21,16 +21,14 @@
             <div class="forms__group">
                 <input type="text" name="Profile" id="Profile" class="forms__input--text" placeholder=" " required>
                 <label for="Profile" class="forms__label">Usuario o Correo</label>
-                <div class="svg-inline" data-src="{{ url_for('static', filename='image/icons/user.svg') }}"></div>
+                <div class="svg-src" data-src="user"></div>
             </div>
 
             <!-- Grupo Contraseña -->
             <div class="forms__group">
-                <input type="password" name="Password" id="Password" class="forms__input--text" placeholder=" " required
-                    minlength="8">
+                <input type="password" name="Password" id="Password" class="forms__input--text" placeholder=" " required>
                 <label for="Password" class="forms__label">Contraseña</label>
-                <div class="svg-inline password__toggle"
-                    data-src="{{ url_for('static', filename='image/icons/visibility_off.svg') }}" role="button"
+                <div class="svg-src password__toggle" data-src="visibility_off" role="button"
                     tabindex="0"></div>
             </div>
 

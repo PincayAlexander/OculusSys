@@ -1,29 +1,85 @@
-// Función para cargar SVGs
-function loadSVG(container) {
-  const src = container.getAttribute('data-src');
-  if (!src) return;
+// Cache global para los SVGs
+const svgCache = {};
 
-  fetch(src)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.text();
-    })
-    .then(svg => {
-      container.innerHTML = svg;
-      container.classList.add('svg-loaded');
-    })
-    .catch(error => {
-      console.error('Error al cargar el SVG:', src, error);
-    });
+// Precarga un SVG y guarda en cache
+async function precargarSVG(nombre, url) {
+  if (svgCache[nombre]) return svgCache[nombre];
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Error cargando SVG ${nombre}: ${res.status}`);
+    const svgText = await res.text();
+    svgCache[nombre] = svgText;
+    return svgText;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }
 
-// Configurar el toggle de contraseña
+async function precargarTodosSVG() {
+  const nombres = [
+    'account',  'ajuste', 'ayuda', 'calendar', 'camara', 'cerrar',
+    'delete', 'deteccion', 'edit', 'error', 'exportar', 'filter',
+    'Facebook', 'Google', 'inicio', 'logout', 'notifications',
+    'password', 'reporte', 'search', 'tasks', 'user', 'video', 
+    'visibility_off', 'visibility_on', 'warning', 'ampliar',
+    'captura', 'mas', 'menos', 'añadir'
+  ];
+  const basePath = '/static/image/icons/';
+
+  await Promise.all([
+    ...nombres.map(nombre => precargarSVG(nombre, `${basePath}${nombre}.svg`)),
+    precargarSVG('logo', '/static/image/logo.svg')
+  ]);
+
+}
+
+
+async function insertarSVG(nombre, contenedorSelector) {
+  const svgText = svgCache[nombre];
+  if (!svgText) {
+    console.warn(`SVG '${nombre}' no precargado`);
+    return;
+  }
+  const contenedor = typeof contenedorSelector === 'string'
+    ? document.querySelector(contenedorSelector)
+    : contenedorSelector;
+
+  if (!contenedor) {
+    console.warn(`Contenedor no encontrado: ${contenedorSelector}`);
+    return;
+  }
+
+  contenedor.innerHTML = svgText;
+}
+
+
+// Insertar SVG de cache en el contenedor toggle
+function loadSVG(toggle) {
+  const src = toggle.getAttribute('data-src-name');
+  if (!src) return;
+
+  const svg = svgCache[src];
+  if (svg) {
+    toggle.innerHTML = svg;
+    toggle.classList.add('svg-loaded');
+  } else {
+    toggle.innerHTML = '';
+  }
+}
+
+// Setup toggle
 function setupPasswordToggle(toggle) {
-  // Guardar las rutas base de los iconos
-  toggle.setAttribute('data-icon-off', toggle.getAttribute('data-src'));
-  toggle.setAttribute('data-icon-on', toggle.getAttribute('data-src').replace('visibility_off.svg', 'visibility_on.svg'));
+  // Guardar los nombres clave de los iconos, no la ruta completa
+  const iconOff = 'visibility_off';
+  const iconOn = 'visibility_on';
+
+  toggle.setAttribute('data-icon-off', iconOff);
+  toggle.setAttribute('data-icon-on', iconOn);
+
+  // Inicializar atributo para el svg que debe mostrar ahora (off al inicio)
+  toggle.setAttribute('data-src-name', iconOff);
+  loadSVG(toggle);
 
   // Manejar click
   toggle.addEventListener('click', function () {
@@ -41,25 +97,27 @@ function setupPasswordToggle(toggle) {
   });
 }
 
-// Alternar visibilidad de contraseña
+// Alternar visibilidad de contraseña con cache de svg
 function togglePasswordVisibility(input, toggle) {
   const isPassword = input.type === 'password';
   input.type = isPassword ? 'text' : 'password';
   toggle.classList.toggle('active', !isPassword);
 
-  // Cambiar entre SVG específicos usando las rutas guardadas
-  const newSrc = isPassword ? toggle.getAttribute('data-icon-on') : toggle.getAttribute('data-icon-off');
-  toggle.setAttribute('data-src', newSrc);
+  // Cambiar entre nombres de iconos
+  const newIcon = isPassword ? toggle.getAttribute('data-icon-on') : toggle.getAttribute('data-icon-off');
+  toggle.setAttribute('data-src-name', newIcon);
 
   // Actualizar accesibilidad
   toggle.setAttribute('aria-label', isPassword ? 'Ocultar contraseña' : 'Mostrar contraseña');
 
-  // Recargar el SVG
+  // Recargar el SVG desde cache
   loadSVG(toggle);
 }
 
+
+
 // Funcion para mostrar mensajes flash
-function mostrarFlashMensaje(mensaje, categoria="info", duracion = 4000) {
+function mostrarFlashMensaje(mensaje, categoria = "info", duracion = 4000) {
   const flashContainer = document.getElementById("flash-message");
   if (!flashContainer) return;
 
@@ -156,7 +214,6 @@ function markAsRead(id) {
     });
 }
 
-
 function markAllAsRead() {
   fetch(`/app/notificaciones/notificaciones/all/leido`, { method: 'POST' })
     .then(res => {
@@ -174,33 +231,41 @@ function markAllAsRead() {
 }
 
 function getIcono(tipo) {
-    switch (tipo) {
-        case 'info': return '🔔';
-        case 'warning': return '📊';
-        case 'error': return '❓';
-        case 'success': return '✅';
-        default: return '📌';
-    }
+  switch (tipo) {
+    case 'info': return '🔔';
+    case 'warning': return '📊';
+    case 'error': return '❓';
+    case 'success': return '✅';
+    default: return '📌';
+  }
 }
 
 function formatFecha(fechaStr) {
-    return new Date(fechaStr).toLocaleString('es-EC', {
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-    });
+  return new Date(fechaStr).toLocaleString('es-EC', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Cargar SVGs iniciales
-  const svgContainers = document.querySelectorAll('.svg-inline[data-src]');
 
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1. Precargar todos los SVGs que definiste
+  await precargarTodosSVG();
+
+  // 2. Insertar en todos los contenedores con clase "svg-src" el SVG cacheado según su data-src
+  const svgContainers = document.querySelectorAll('.svg-src[data-src]');
   svgContainers.forEach(container => {
-    loadSVG(container);
-
-    // Si es un toggle de contraseña, añadir los event listeners
-    if (container.classList.contains('password__toggle')) {
-      setupPasswordToggle(container);
+    const nombreSVG = container.getAttribute('data-src');
+    if (nombreSVG) {
+      insertarSVG(nombreSVG, container);
     }
+  });
+
+  // 3. Inicializar toggles de contraseña
+  document.querySelectorAll('.password__toggle').forEach(toggle => {
+    setupPasswordToggle(toggle);
   });
 
   // FLASH MESSAGES

@@ -75,7 +75,7 @@
   align-items: center;
 }
 
-.forms__header .svg-inline {
+.forms__header .svg-src {
   max-width: 5rem;
   height: auto;
 }
@@ -83,7 +83,7 @@
 /* Grupo de campos */
 .forms__group {
   position: relative;
-  color: var(--gris-claro);
+  color: var(--gris);
   margin-top: .7rem;
   box-sizing: border-box;
   align-items: center;
@@ -116,7 +116,7 @@
   border-color: var(--verde);
 }
 
-.forms__group .svg-inline {
+.forms__group .svg-src {
   max-width: 1rem;
   height: auto;
   position: absolute;
@@ -131,7 +131,7 @@
   left: .5rem;
   transform: translateY(-50%);
   background-color: var(--blanco);
-  color: var(--negro);
+  color: var(--gris);
   font-size: var(--text-base);
   padding: 0 .3rem;
   pointer-events: none;
@@ -153,7 +153,7 @@
 
 /* color por defecto */
 .forms__input--text:not(:focus)~.forms__label {
-  color: var(--negro);
+  color: var(--gris);
 }
 
 /* Validaciones visuales */
@@ -236,18 +236,6 @@ input[type="password"]::-moz-reveal {
   display: flex;
   flex-direction: row;
   gap: 0.9375rem;
-}
-
-.btn__submit {
-  background-color: var(--verde);
-  color: var(--blanco);
-  width: 100%;
-  border: none;
-}
-
-.btn__submit:hover {
-  background-color: #0d845c;
-  box-shadow: 2px 2px 0px #004e35;
 }
 
 
@@ -374,7 +362,7 @@ input[type="password"]::-moz-reveal {
   width: 100%;
 }
 
-.profile__header .svg-inline svg {
+.profile__header .svg-src svg {
   width: 2.7rem;
   height: auto;
   margin-bottom: 1rem;
