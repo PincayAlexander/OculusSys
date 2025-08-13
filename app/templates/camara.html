@@ -5,7 +5,6 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/camara.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/filtros.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -45,8 +44,10 @@
 
   <!-- Modal de registro de camara -->
   <div id="modalRegistroCamara" class="modal__background" aria-hidden="true">
-    <div class="modal">
-      <button class="modal__close" onclick="cerrarModal('modalRegistroCamara')">✖</button>
+    <div class="modal modal--small modal__registrocamara">
+      <button class="modal__close" onclick="cerrarModal('modalRegistroCamara')">
+        <div class="svg-src" data-src="cerrar"></div>
+      </button>
       <h4>Registrar nueva cámara</h4>
       <form action="{{ url_for('camara.registrar_camara') }}" method="POST">
         <div class="modal__group">
@@ -73,7 +74,7 @@
   <div class="camaras">
     <div class="camara__header">
       <button class="btn btn__primary" onclick="abrirModal('modalRegistroCamara')">
-        <div class="svg-src" data-src="añadir"></div> 
+        <div class="svg-src" data-src="añadir"></div>
         Registrar nueva cámara
       </button>
     </div>
@@ -88,6 +89,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/camaras.js') }}"></script>
 {% endblock %}

@@ -16,6 +16,7 @@
     <!-- Estilos -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
     {% block stylesheets %}{% endblock %}
 </head>
 
@@ -33,34 +34,34 @@
 
         <!-- Menú -->
         <ul class="nav__menu">
-            <li class="nav__menu--item">
+            <li class="nav__menu--item {% if active_page == 'inicio' %}active{% endif %}">
                 <a href="{{url_for('inicio.menu_inicio')}}" class="nav__menu--link">
                     <div class="svg-src" data-src="inicio"></div>
                     Inicio
                 </a>
             </li>
-            <li class="nav__menu--item">
+            <li class="nav__menu--item {% if active_page == 'reporte' %}active{% endif %}">
                 <a href="{{url_for('reporte.vista_reporte') }}" class="nav__menu--link">
                     <div class="svg-src" data-src="reporte">
                     </div>
                     Reportes
                 </a>
             </li>
-            <li class="nav__menu--item">
+            <li class="nav__menu--item {% if active_page == 'camara' %}active{% endif %}">
                 <a href="{{ url_for('camara.vista_camara') }}" class="nav__menu--link">
                     <div class="svg-src" data-src="camara"></div>
                     Cámaras
                 </a>
             </li>
-            <li class="nav__menu--item">
+            <li class="nav__menu--item {% if active_page == 'deteccion' %}active{% endif %}">
                 <a href="{{ url_for('deteccion.vista_detecciones') }}" class="nav__menu--link">
                     <div class="svg-src" data-src="deteccion">
                     </div>
                     Detecciones
                 </a>
             </li>
-            <li class="nav__menu--item">
-                <a href="#" class="nav__menu--link">
+            <li class="nav__menu--item {% if active_page == 'ajuste' %}active{% endif %}">
+                <a href="{{url_for('construccion')}}" class="nav__menu--link">
                     <div class="svg-src" data-src="ajuste"></div>
                     Ajustes
                 </a>
@@ -72,20 +73,20 @@
             <!-- Notificaciones -->
             <div class="nav__notifications dropdown">
                 <button class="nav__notifications-button dropdown__toggle">
-                    <div class="nav__notifications-icon svg-src"
-                        data-src="notifications"></div>
-                        <span class="notif__badge" id="notifBadge"></span>
+                    <div class="nav__notifications-icon svg-src" data-src="notifications"></div>
+                    <span class="notif__badge" id="notifBadge"></span>
                 </button>
                 <div class="dropdown__menu">
                     <div class="dropdown__header">
                         <h6>Notificaciones</h6>
                         <div class="dropdown__header--buttons">
-                        <button class="notif__mark-all" title="Marcar todo como leído" onclick="markAllAsRead()">
-                            <div class="svg-src" data-src="tasks"></div>
-                        </button>
-                        <a class="notif__manage" title="Administrar todas las notificaciones" href="{{url_for('notificacion.vista_notificaciones')}}">
-                            <div class="svg-src" data-src="edit"></div>
-                        </a>                            
+                            <button class="notif__mark-all" title="Marcar todo como leído" onclick="markAllAsRead()">
+                                <div class="svg-src" data-src="tasks"></div>
+                            </button>
+                            <a class="notif__manage" title="Administrar todas las notificaciones"
+                                href="{{url_for('notificacion.vista_notificaciones')}}">
+                                <div class="svg-src" data-src="edit"></div>
+                            </a>
                         </div>
 
                     </div>
@@ -106,11 +107,12 @@
             <!-- Perfil de usuario -->
             <div class="nav__user dropdown">
                 <button class="nav__user-button dropdown__toggle">
-                    <img src="{{ url_for('static', filename='image/other/profile.png') }}" alt="Avatar"
-                        class="nav__user-avatar">
+                    <img src="{{ url_for('auth.ver_foto_usuario') }}" alt="Foto de perfil" class="nav__user-avatar">
                 </button>
                 <div class="dropdown__menu dropdown__menu--user">
-                    <div class="dropdown__header"><h6>{{ session['username'] }}</h6></div>
+                    <div class="dropdown__header">
+                        <h6>{{ session['username'] }}</h6>
+                    </div>
                     <div class="dropdown__divider"></div>
                     <div class="dropdown__item">
                         <a href="{{url_for('auth.vista_perfil')}}" class="dropdown__item--link">
@@ -120,13 +122,13 @@
                         </a>
                     </div>
                     <div class="dropdown__item">
-                        <a href="#" class="dropdown__item--link">
+                        <a class="dropdown__item--link" onclick="abrirModalCambiarContrasena()">
                             <div class="svg-src" data-src="password"></div>
                             Cambiar Contraseña
                         </a>
                     </div>
                     <div class="dropdown__item">
-                        <a href="#" class="dropdown__item--link">
+                        <a href="{{url_for('construccion')}}" class="dropdown__item--link">
                             <div class="svg-src" data-src="ayuda"></div>
                             Ayuda
                         </a>
@@ -163,6 +165,9 @@
     <!-- Scripts -->
     {% block scripts %}{% endblock %}
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/validators.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/contrasenia.js') }}"></script>
 </body>
 
 </html>

@@ -11,7 +11,7 @@
 
 /* Contenedor principal */
 .modal {
-background: var(--blanco);
+    background: var(--blanco);
     border-radius: 10px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
     max-width: 70dvw;
@@ -22,15 +22,18 @@ background: var(--blanco);
 
 /* Modal grande para cámaras */
 .modal--large {
-    width: 70dvw;
+    width: 50dvw;
     height: 70dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.modal img {
+#modalVistCamara .modal img {
     flex: 1;
+    width: 95%;
+    height: 90%;
+    object-fit: contain;
 }
 
 /* Botón cerrar */
@@ -42,12 +45,22 @@ background: var(--blanco);
     border: none;
     font-size: 1.3rem;
     cursor: pointer;
+    width: 1.7rem;
 }
 
 /* Campos flotantes */
 .modal__group {
     position: relative;
     margin-top: 1rem;
+}
+
+.modal__group .svg-src {
+    max-width: 1rem;
+    height: auto;
+    position: absolute;
+    right: .9rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .modal__input {
@@ -85,6 +98,39 @@ background: var(--blanco);
     font-family: 'Acme', sans-serif;
 }
 
+.modal__list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+    text-align: left;
+    font-size: var(--text-sm);
+    color: var(--negro);
+}
+
+.modal__group--validations {
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos para cada ítem de validación */
+#length-validation,
+#chars-validation,
+#match-validation {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+/* Clases para estados de validación (usarás con JS) */
+.validation-error {
+    color: var(--rojo);
+}
+
+.validation-success {
+    color: var(--verde);
+}
+
 /* Footer del modal */
 .modal__footer {
     display: flex;
@@ -92,4 +138,26 @@ background: var(--blanco);
     gap: .5rem;
     margin-top: 1rem;
     align-items: center;
+}
+
+.modal__buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal__registrocamara {
+    padding: 2rem;
+    min-width: 20dvw;
+}
+
+.modal__contrasenia {
+    min-width: 20dvw;
+    padding: 2rem;
+}
+
+.modal__ampliarcamara {
+    min-width: 60dvw;
+    padding: 2rem;
 }

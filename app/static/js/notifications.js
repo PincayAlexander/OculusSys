@@ -6,9 +6,9 @@ async function cargarTodasNotificaciones() {
   try {
     const res = await fetch('/app/notificaciones/get_user_notification/');
     if (!res.ok) throw new Error("Error al obtener notificaciones");
-    const notificaciones = await res.json();
+    const data = await res.json();
 
-    renderResumen(notificaciones);
+    renderResumen(data.notificaciones);
   } catch (err) {
     console.error(err);
   }

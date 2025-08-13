@@ -33,6 +33,14 @@
     url('/static/image/background/inicio.jpeg');
 }
 
+.hero--inicio .svg-src svg {
+  width: 10rem;
+}
+
+.hero--inicio h4 {
+  color: var(--cafe);
+}
+
 @supports (background-image: url('/static/image/background/index.webp')) {
     .hero--inicio {
         background-image: 

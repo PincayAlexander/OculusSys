@@ -11,7 +11,8 @@
     <div class="forms signin__form">
         <!-- Formulario -->
         <h2 class="forms__title">Regístrate</h2>
-        <form method="POST" action="{{ url_for('auth.procesar_registro') }}" id="signinForm" >
+        <form method="POST" action="{{ url_for('auth.procesar_registro') }}" id="signinForm"
+            enctype="multipart/form-data">
 
             <!-- Nombres y Apellidos -->
             <div class="forms__group--double">
@@ -32,31 +33,38 @@
                 <input type="text" name="username" id="username" class="forms__input--text" placeholder=" " required>
                 <label for="username" class="forms__label">Nombre de usuario</label>
             </div>
-            
+
             <!-- Correo -->
             <div class="forms__group">
-                <input type="email" name="email" id="email" class="forms__input--text" placeholder=" " required 
-                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Ingresa un correo electrónico válido.">
+                <input type="email" name="email" id="email" class="forms__input--text" placeholder=" " required
+                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                    title="Ingresa un correo electrónico válido.">
 
                 <label for="email" class="forms__label">E-mail</label>
             </div>
 
-            <!-- Contraseña -->
+            <!-- Foto de perfil -->
             <div class="forms__group">
-                <input type="password" name="password" id="password" class="forms__input--text" placeholder=" " required
-                    minlength="8">
-                <label for="password" class="forms__label">Contraseña</label>
-                <div class="svg-src password__toggle" data-src="visibility_off" role="button"
-                    tabindex="0"></div>
+                <label for="foto_perfil" class="forms__label--file">Foto de perfil</label>
+                <input type="file" name="foto_perfil" id="foto_perfil" accept="image/*" class="forms__input--file">
             </div>
 
-            <!-- Confirmar Contraseña -->
-            <div class="forms__group">
-                <input type="password" name="confirm_password" id="confirm_password" class="forms__input--text"
-                    placeholder=" " required>
-                <label for="confirm_password" class="forms__label">Confirmar Contraseña</label>
-                <div class="svg-src password__toggle" data-src="visibility_off" role="button"
-                    tabindex="0"></div>
+            <div class="forms__group--double">
+                <!-- Contraseña -->
+                <div class="forms__group halft">
+                    <input type="password" name="password" id="password" class="forms__input--text" placeholder=" "
+                        required minlength="8">
+                    <label for="password" class="forms__label">Contraseña</label>
+                    <div class="svg-src password__toggle" data-src="visibility_off" role="button" tabindex="0"></div>
+                </div>
+
+                <!-- Confirmar Contraseña -->
+                <div class="forms__group halft">
+                    <input type="password" name="confirm_password" id="confirm_password" class="forms__input--text"
+                        placeholder=" " required>
+                    <label for="confirm_password" class="forms__label">Confirmar Contraseña</label>
+                    <div class="svg-src password__toggle" data-src="visibility_off" role="button" tabindex="0"></div>
+                </div>
             </div>
 
             <!-- Validaciones Visuales (contraseña) -->
@@ -71,8 +79,8 @@
             <!-- Aceptar términos -->
             <div class="forms__group check__validator flex-row">
                 <label class="forms__label--checkbox">
-                    <input type="checkbox" name="terms" class="forms__checkbox" id="termsCheckbox" required 
-               title="Debe aceptar los Términos de Servicio y la Política de Privacidad">
+                    <input type="checkbox" name="terms" class="forms__checkbox" id="termsCheckbox" required
+                        title="Debe aceptar los Términos de Servicio y la Política de Privacidad">
                     <span>Acepto los Términos de Servicio y Política de Privacidad</span>
                 </label>
             </div>

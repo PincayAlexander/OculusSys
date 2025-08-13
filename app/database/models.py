@@ -6,6 +6,7 @@ class usuario(db.Model):
     __table_args__ = {'mysql_engine': 'InnoDB', 'mysql_collate': 'utf8mb4_spanish_ci'}
 
     idUsuario = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    foto_perfil = db.Column(db.LargeBinary)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -22,7 +23,11 @@ class usuario(db.Model):
     deteccion = db.relationship('deteccionPlaga', back_populates='usuario', cascade='all, delete-orphan')
 
     def to_dict(self):
-        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
+        data = {col.name: getattr(self, col.name) for col in self.__table__.columns}
+        if self.foto_perfil:
+            import base64
+            data['foto_perfil'] = base64.b64encode(self.foto_perfil).decode('utf-8')
+        return data
 
 
 class notificacion(db.Model):

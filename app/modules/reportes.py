@@ -17,10 +17,9 @@ import os
 reporte_bp = Blueprint('reporte', __name__, template_folder='app/templates')
 
 @reporte_bp.route('/document', methods=['GET'])
+@login_required
 def vista_reporte():
-    if 'userID' in session:
-        return render_template('reporte.html')
-    return redirect(url_for('auth.mostrar_login'))
+    return render_template('reporte.html', active_page='reporte')
 
 
 
@@ -32,7 +31,7 @@ detecciones_bp = Blueprint('deteccion', __name__, template_folder='app/templates
 @detecciones_bp.route('/detection', methods=['GET'])
 @login_required
 def vista_detecciones():
-    return render_template('deteccion.html')
+    return render_template('deteccion.html', active_page='deteccion')
 
 
 

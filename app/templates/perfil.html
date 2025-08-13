@@ -14,14 +14,25 @@
   </div>
 
   <div class="profile__avatar">
-    <img src="{{ url_for('static', filename='image/other/profile.png') }}" alt="Avatar">
+
+    <div class="avatar-wrapper" style="position: relative; display: inline-block;">
+      <img id="profileImg" src="{{ url_for('auth.ver_foto_usuario') }}" alt="Foto de perfil" style="width:150px; height:150px; border-radius:50%; object-fit:cover;">
+      <!-- Mini cámara para subir imagen -->
+      <label for="foto_perfil_input" class="camera-icon" style="position:absolute; bottom:5px; right:5px; cursor:pointer;">
+        <div class="svg-src" data-src="captura"></div>
+      </label>
+
+    </div>
+
+
     <div class="profile__info">
       <p class="profile__username">{{ usuario.first_name }} {{ usuario.last_name }}</p>
       <p class="profile__email">{{ usuario.email }}</p>
     </div>
   </div>
 
-  <form id="profileForm" class="" method="POST" action="{{ url_for('auth.actualizar_perfil') }}">
+  <form method="POST" action="{{ url_for('auth.actualizar_perfil') }}" id="profileForm" enctype="multipart/form-data">
+    <input type="file" id="foto_perfil_input" name="foto_perfil" accept="image/*" style="display:none;">
     <!-- Nombres y Apellidos -->
     <div class="forms__group--double">
       <div class="forms__group halft">
@@ -45,33 +56,10 @@
       </div>
       <div class="forms__group halft">
         <input type="email" name="email" id="email" class="forms__input--text" placeholder=" "
-          value="{{ usuario.email }}" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+          value="{{ usuario.email }}" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
           title="Ingresa un correo electrónico válido.">
         <label for="email" class="forms__label">E-mail</label>
       </div>
-    </div>
-
-    <!-- Contraseñas -->
-    <div class="forms__group--double">
-      <div class="forms__group halft">
-        <input type="password" name="password" id="password" class="forms__input--text" placeholder=" " minlength="8">
-        <label for="password" class="forms__label">Nueva contraseña</label>
-        <div class="svg-src password__toggle" data-src="visibility_off" role="button" tabindex="0"></div>
-      </div>
-      <div class="forms__group halft">
-        <input type="password" name="confirm_password" id="confirm_password" class="forms__input--text" placeholder=" ">
-        <label for="confirm_password" class="forms__label">Confirmar contraseña</label>
-        <div class="svg-src password__toggle" data-src="visibility_off" role="button" tabindex="0"></div>
-      </div>
-    </div>
-
-    <!-- Validaciones Visuales (contraseña) -->
-    <div class="forms__group forms__group--validations">
-      <ul class="forms__list">
-        <li id="length-validation">🔒 Mínimo 8 caracteres</li>
-        <li id="chars-validation">🔠 Al menos 1 mayúscula, 1 minúscula y 1 número</li>
-        <li id="match-validation">✅ Las contraseñas coinciden</li>
-      </ul>
     </div>
 
     <!-- Botón de envío -->
@@ -85,5 +73,22 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/validators.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const fotoInput = document.getElementById('foto_perfil_input');
+    const profileImg = document.getElementById('profileImg');
+
+    // Mostrar la imagen seleccionada inmediatamente
+    fotoInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                profileImg.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
 {% endblock %}

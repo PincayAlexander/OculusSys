@@ -54,6 +54,15 @@
   padding: 0;
 }
 
+.nav__menu--item.active {
+    background-color: var(--blanco);
+    border-radius: 5px;
+}
+
+.nav__menu--item.active .nav__menu--link {
+    color: var(--negro);
+}
+
 .nav__menu--link {
   text-decoration: none;
   color: var(--blanco);
@@ -84,6 +93,7 @@
 .nav__menu--link:hover {
   background-color: var(--gris-claro);
   color: var(--negro);
+  border-radius: 5px;
 }
 
 /* Nav Profile Elements */
@@ -258,6 +268,7 @@
 .dropdown__item {
   color: var(--negro);
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 
 .dropdown__item:hover {

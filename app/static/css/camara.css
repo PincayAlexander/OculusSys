@@ -35,9 +35,22 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.camara__item h4 {
+.camara__item--header {
+  display: flex;
+  justify-content: flex-start;
+  gap: .8rem;
   border-bottom: 2px solid var(--gris-claro);
   padding-bottom: .6rem;
+  align-items: center;
+}
+
+.camara__item--header h4 {
+  margin: 0;
+}
+
+.camara__item--header .svg-src svg {
+  width: 1.8rem;
+  height: auto;
 }
 
 .camara__item img {

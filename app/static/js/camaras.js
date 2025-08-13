@@ -10,7 +10,11 @@ async function cargarCamaras() {
     const card = document.createElement('div');
     card.classList.add('camara__item');
     card.innerHTML = `
-      <h4>${c.nombre}</h4>
+      
+      <div class="camara__item--header">
+        <div class="svg-src" data-src="video"></div>
+        <h4>${c.nombre}</h4>    
+      </div>
       <img class camara__item--video id="camaraImg${c.id}" src="${c.url}/video" alt="Cámara ${c.nombre}">
       <div class="item__btns">
         <button class="btn btn__primary" onclick="abrirModalVistaCamara('${c.url}', ${c.id})">
@@ -40,9 +44,10 @@ function abrirModalVistaCamara(url, idCamara) {
     modal.setAttribute('aria-hidden', 'false');
 
     modal.innerHTML = `
-      <div class="modal modal--large">
+      <div class="modal modal--large modal__ampliarcamara">
         <button class="modal__close" onclick="cerrarModalCamara('modalVistaCamara')">
-          <div class="svg-src" data-src="cerrar"></div></button>
+          <div class="svg-src" data-src="cerrar"></div>
+        </button>
         <img id="videoAmpliado" width="700px" alt="Vista ampliada" style="border-radius: 5px; border: 1px solid #ccc;">
         <div class="modal__footer">
           <button class="btn btn__primary" onclick="capturarFotoImg(${camaraActiva}, '${url}')">
@@ -120,10 +125,10 @@ async function capturarFotoImg(idCamara, urlCamara) {
       body: JSON.stringify({ imagen: base64 })
     });
 
-    alert("Foto capturada y guardada exitosamente");
+    mostrarFlashMensaje('Foto capturada y guardada exitosamente', 'success');
   } catch (error) {
-    console.error(error);
-    alert("Error al capturar la foto: " + error.message);
+    console.error("Error al capturar la foto: "+ error);
+    mostrarFlashMensaje('Error al capturar la foto', 'error');
   }
 }
 

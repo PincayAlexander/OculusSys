@@ -1,0 +1,59 @@
+{% extends "layout/base.html" %}
+
+{% block title %}En Construcción - Oculus{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .construccion-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        text-align: center;
+        padding: 2rem;
+        color: #333;
+    }
+
+    .construccion-container h1 {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .construccion-container p {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .construccion-container img {
+        width: 250px;
+        max-width: 80%;
+        margin-bottom: 2rem;
+    }
+
+    .btn-volver {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        background-color: var(--verde);
+        color: var(--blanco);
+        border-radius: 8px;
+        text-decoration: none;
+        transition: background 0.3s;
+    }
+
+    .btn-volver:hover {
+        background-color: #0d845c;
+        box-shadow: 2px 2px 0px #004e35;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="construccion-container">
+    <img src="{{ url_for('static', filename='image/other/construccion.png') }}" alt="En Construcción">
+    <h1>¡Estamos trabajando en ello!</h1>
+    <p>Esta sección aún no está disponible. Pronto volverá con novedades.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-volver">Volver al Inicio</a>
+</div>
+{% endblock %}

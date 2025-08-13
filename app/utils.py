@@ -44,6 +44,7 @@ def crear_superadmin():
         admin_existente = usuario.query.filter_by(username='superAdmin').first()
         if not admin_existente:
             admin = usuario(
+                foto_perfil=None,
                 first_name='Super',
                 last_name='Admin',
                 username='superAdmin',

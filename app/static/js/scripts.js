@@ -157,14 +157,15 @@ async function cargarNotificaciones() {
   try {
     const res = await fetch('/app/notificaciones/get_user_notification/?limit=10');
     if (!res.ok) throw new Error("Error al obtener notificaciones");
-    const notificaciones = await res.json();
+    const data = await res.json();
 
-    // Actualizar badge
-    const unreadCount = notificaciones.filter(n => !n.leido).length;
+    // data.notificaciones -> las últimas 10
+    // data.total_no_leidas -> conteo real de no leídas
+
     const badge = document.getElementById('notifBadge');
     if (badge) {
-      if (unreadCount > 0) {
-        badge.textContent = unreadCount;
+      if (data.total_no_leidas > 0) {
+        badge.textContent = data.total_no_leidas;
         badge.style.display = 'inline';
       } else {
         badge.style.display = 'none';
@@ -176,9 +177,8 @@ async function cargarNotificaciones() {
 
     menu.innerHTML = ''; // limpiar contenido anterior
 
-    notificaciones.forEach(notif => {
-      let icono = getIcono(notif.tipo);
-
+    data.notificaciones.forEach(notif => {
+      const icono = getIcono(notif.tipo);
       const fecha = formatFecha(notif.fecha);
 
       const item = document.createElement('div');
@@ -190,7 +190,7 @@ async function cargarNotificaciones() {
           <div class="notif__title">${icono} ${notif.titulo}</div>
           <div class="notif__fecha">${fecha}</div>
         </div>
-        ${!notif.leido ? `<button class="notif__leido-btn" title="Marcar como leído" onclick="markAsRead(${notif.idNotificacion})">✔</button>` : ''} `;
+        ${!notif.leido ? `<button class="notif__leido-btn" title="Marcar como leído" onclick="markAsRead(${notif.idNotificacion})">✔</button>` : ''}`;
 
       menu.appendChild(item);
     });
@@ -199,6 +199,7 @@ async function cargarNotificaciones() {
     console.error(err);
   }
 }
+
 
 function markAsRead(id) {
   fetch(`/app/notificaciones/notificaciones/${id}/leido`, { method: 'POST' })

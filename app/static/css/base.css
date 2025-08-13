@@ -246,7 +246,6 @@ a.btn {
 
 /* SVG */
 .svg-src {
-  max-width: 3rem;
   height: max-content;
   display: grid;
   align-items: center;

@@ -25,6 +25,12 @@ def create_app(config=None) -> Flask:
             return render_template('index.html')
         return redirect(url_for('inicio.menu_inicio'))
     
+    # --- Pagina en Construccion ---
+    @app.route('/pagina_en_construccion')
+    def construccion():
+        return render_template('other/enConstruccion.html')
+    
+    
     # --- Errores personalizados ---
     @app.errorhandler(404)
     def error_404(error):
