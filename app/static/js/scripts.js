@@ -249,8 +249,6 @@ function formatFecha(fechaStr) {
 }
 
 
-
-
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Precargar todos los SVGs que definiste
   await precargarTodosSVG();
@@ -314,4 +312,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     notifButton.addEventListener('click', cargarNotificaciones);
   }
 
+});
+
+
+flatpickr("#filtroFecha", {
+  mode: "range",        // permite seleccionar inicio y fin
+  dateFormat: "d M Y",  // formato de fecha
+  locale: {
+    firstDayOfWeek: 1,  // lunes como primer día
+    ...flatpickr.l10ns.es // idioma español
+  },
+  onChange: function(selectedDates, dateStr, instance) {
+    console.log(selectedDates); // array con [fechaInicio, fechaFin]
+  }
 });

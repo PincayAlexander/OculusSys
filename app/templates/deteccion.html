@@ -1,148 +1,110 @@
 {% extends "layout/base.html" %}
 
-{% block title %}Detección Positiva de Plaga{% endblock %}
+{% block title %}Detecciones{% endblock %}
 
 {% block stylesheets %}
-<style>
-  .container {
-    display: flex;
-    padding: 20px;
-  }
-
-  .sidebar {
-    width: 200px;
-    background-color: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-    margin-right: 20px;
-  }
-
-
-  .sidebar select {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
-  }
-
-  .main-content {
-    flex: 1;
-  }
-
-  .card {
-    background: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-  }
-
-  .card ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-  }
-
-  .card ul li {
-    margin: 0 0 0 .9rem;
-    padding: 0;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .alert {
-    color: red;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-
-  .image-section {
-    border: 2px solid #007bff;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 20px;
-    background: white;
-  }
-
-  .image-section img {
-    width: 100%;
-    border-radius: 5px;
-  }
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/deteccion.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/filtros.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="container">
-  <!-- Sidebar con filtros separados -->
-  <aside class="sidebar">
-    <h3>Filtros</h3>
+<h2>Detalles de Detecciones Realizadas</h2>
 
-    <label for="filtroArea" class="block text-sm mb-1">Área</label>
-    <select id="filtroArea">
-      <option>Área 1</option>
-      <option>Área 2</option>
-      <option>Área 3</option>
-    </select>
+<div class="detecciones__container">
+    <!-- Filtro lateral -->
+    <aside class="filtros">
+      <div class="filtro__header">
+        <div class="svg-src" data-src="filter"></div>
+        <h4>Filtros</h4>
+      </div>
 
-    <label for="filtroParcela" class="block text-sm mb-1">Parcela</label>
-    <select id="filtroParcela">
-      <option>Parcela A</option>
-      <option>Parcela B</option>
-      <option>Parcela C</option>
-    </select>
-  </aside>
+<!-- Filtro de Fechas -->
+<div class="filtros__grupo filtro-icono">
+  <label for="filtroFecha" class="filtros__etiqueta">Fechas</label>
+  <div class="input-con-icono">
+    <input type="text" id="filtroFecha" placeholder="Selecciona un rango">
+    <div class="svg-src" data-src="calendar"></div>
+  </div>
+</div>
 
-  <!-- Contenido principal -->
-  <main class="main-content">
-    <h2>DETECCIÓN POSITIVA DE PLAGA</h2>
 
-    <div class="card">
-      <h3>Ubicación de la detección</h3>
-      <div class="grid">
-        <div><strong>Provincia:</strong> Manabí</div>
-        <div><strong>Finca:</strong> Los Ajos</div>
-        <div><strong>Plantación:</strong> Sección de Café 002</div>
-        <div><strong>Bloque:</strong> Bloque A</div>
-        <div><strong>Coordenadas:</strong> -1.22445, -91.02</div>
+      <!-- Filtro de Parcelas -->
+      <div class="filtros__grupo">
+        <label for="filtroParcelas" class="filtros__etiqueta">Parcela</label>
+        <select id="filtroParcelas" class="filtros__select">
+          <option value="todas">Todas</option>
+          <option value="parcela-a">Parcela A</option>
+          <option value="parcela-b">Parcela B</option>
+          <option value="parcela-c">Parcela C</option>
+        </select>
+      </div>
+
+      <!-- Filtro de Áreas -->
+      <div class="filtros__grupo">
+        <label for="filtroAreas" class="filtros__etiqueta">Área</label>
+        <select id="filtroAreas" class="filtros__select">
+          <option value="todas">Todas</option>
+          <option value="area-1">Área 1</option>
+          <option value="area-2">Área 2</option>
+          <option value="area-3">Área 3</option>
+        </select>
+      </div>
+    </aside>
+
+  <!-- Contenedor de listado + detalle -->
+  <main class="detalle-container">
+    <!-- Lista de plagas (50%) -->
+    <div class="plagas__lista">
+      <h5>Plaga Detectada</h5>
+      <div class="plaga__item" data-id="1">
+        <div class="plaga__titulo">
+          <div class="svg-src" data-src="warning"></div>
+          Broca del café
+        </div>
+        <div class="plaga__fecha">13/08/2025, 09:30 a.m.</div>
+      </div>
+      <div class="plaga__item" data-id="2">
+        <div class="plaga__titulo">
+          <div class="svg-src" data-src="warning"></div>
+          Roya del café
+        </div>
+        <div class="plaga__fecha">13/08/2025, 09:40 a.m.</div>
+      </div>
+      <div class="plaga__item" data-id="3">
+        <div class="plaga__titulo">
+          <div class="svg-src" data-src="warning"></div>
+          Minador de hojas
+        </div>
+        <div class="plaga__fecha">13/08/2025, 10:00 a.m.</div>
+      </div>
+      <div class="plaga__item" data-id="4">
+        <div class="plaga__titulo">
+          <div class="svg-src" data-src="warning"></div>
+          Ojo de gallo
+        </div>
+        <div class="plaga__fecha">13/08/2025, 10:15 a.m.</div>
+      </div>
+      <div class="plaga__item" data-id="5">
+        <div class="plaga__titulo">
+          <div class="svg-src" data-src="warning"></div>
+          Mal de hilachas
+        </div>
+        <div class="plaga__fecha">13/08/2025, 10:30 a.m.</div>
       </div>
     </div>
 
-    <div class="card">
-      <h3>Plaga detectada</h3>
-      <div class="grid">
-        <div><strong>Nombre común:</strong> La Roya</div>
-        <div><strong>Nombre científico:</strong> Hemileia vastatrix</div>
-        <div><strong>Descripción:</strong> Presencia de manchas amarillentas en la parte superior de la hoja</div>
-        <div><strong>Fecha de detección:</strong> 2025-06-30</div>
-        <div><strong>Hora de detección:</strong> 10:45 AM</div>
+    <!-- Detalle e imagen -->
+    <div class="plagas__detalle">
+      <div id="descripcion-container">
+        <p>Haz clic en un elemento de la lista para ver la información detallada.</p>
+
       </div>
-    </div>
-
-    <div class="card">
-      <h3>Grado de afectación</h3>
-      <p><strong>Moderado Severo:</strong></p>
-      <ul>
-        <li>Manchas amarillas en el haz de las hojas.</li>
-        <li>Bordes anaranjados en infecciones de hongos avanzadas.</li>
-        <li>Presencia elevada de esporas visibles sobre el limbo en progresión activa.</li>
-      </ul>
-    </div>
-
-    <div class="alert">
-      ⚠️ ÁREA DE CULTIVO S1-A002: Presencia de 'La Roya'
-    </div>
-
-    <div class="image-section">
-
-      <img src="{{ url_for('static', filename='image/other/rectangle-67.png') }}" alt="Hoja afectada por La Roya" />
+      <div id="imagen-container"></div>
     </div>
   </main>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/plagas.js') }}"></script>
 {% endblock %}

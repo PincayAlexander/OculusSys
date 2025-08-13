@@ -40,8 +40,6 @@
   margin-top: 2rem;
 }
 
-
-
 .notificaciones__detalle--contenido .contenido-resaltado {
   font-weight: 600;
   color: var(--negro);
@@ -78,9 +76,11 @@
   color: var(--negro);
   transition: background-color 0.2s ease;
   border-bottom: 1px solid var(--gris);
+  border-radius: 6px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: .2rem .5rem;
 }
 
 .notificacion__item:hover {

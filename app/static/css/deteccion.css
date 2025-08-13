@@ -1,0 +1,107 @@
+.detecciones__container {
+  display: flex;
+  gap: 1rem;
+  height: 100%;
+  max-width: 78dvw;
+  min-width: 76dvw;
+  height: 74dvh;
+}
+
+.side__detecciones {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.detalle-container {
+  display: flex;
+  gap: 1rem;
+  height: 100%;
+  flex: 1;
+  max-width: 78dvw;
+  min-width: 76dvw;
+}
+
+#descripcion-container p {
+  text-align: center;
+}
+
+/* Lista de plagas */
+.plagas__lista {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  width: 18dvw;
+  padding: 1rem 0;
+  border: 1px solid var(--gris-claro);
+  border-radius: 6px;
+  height: 100%;
+  align-items: center;
+  overflow-y: scroll;
+
+}
+
+.plaga__item {
+  background: var(--blanco);
+  border-bottom: 1px solid var(--gris-claro);
+  border-radius: 6px;
+  padding: .5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  transition: background 0.2s, border-color 0.2s;
+  width: 90%;
+}
+
+.plaga__item:hover {
+  background: var(--gris-claro);
+}
+
+.plaga__item.active {
+  border-color: var(--verde);
+  border-width: 2px;
+}
+
+.plaga__titulo {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.plaga__fecha {
+  font-size: .85rem;
+  color: var(--gris);
+}
+
+/* Detalle e imagen */
+.plagas__detalle {
+  flex: 1;
+  padding: 1rem;
+  background: var(--blanco);
+  border-radius: 6px;
+  border: 1px solid var(--gris-claro);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+#imagen-container img {
+  width: 24rem;
+  height: auto;
+  border-radius: 6px;
+}
+
+#descripcion-container .card {
+  margin: 0 0 .3rem .3rem;
+}
+
+#descripcion-container .card__contenido {
+  padding-left: .4rem;
+}
+
+#descripcion-container .format__lista {
+  padding-left: 1.5rem;
+}

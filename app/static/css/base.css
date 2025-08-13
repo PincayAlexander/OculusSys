@@ -44,47 +44,30 @@ section {
   --amarillo: #f2eb28;
   --rojo-claro: #f67b7d;
   --cafe: #634a43;
-  --gris-claro: #d6d6d6;
+  --gris-claro: #e3e3e3;
   --gris: #656565;
 
   /* Tamaños de fuente */
-  --text-xs: 0.75rem;
-  /* 12px */
-  --text-sm: 0.875rem;
-  /* 14px */
-  --text-base: 1rem;
-  /* 16px */
-  --text-lg: 1.125rem;
-  /* 18px */
-  --text-xl: 1.25rem;
-  /* 20px */
-  --text-2xl: 1.5rem;
-  /* 24px */
-  --text-3xl: 1.875rem;
-  /* 30px */
-  --text-4xl: 2.25rem;
-  /* 36px */
-  --text-5xl: 3rem;
-  /* 48px */
-  --text-6xl: 3.75rem;
-  /* 60px */
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-base: 1rem;    /* 16px */
+  --text-lg: 1.125rem;  /* 18px */
+  --text-xl: 1.25rem;   /* 20px */
+  --text-2xl: 1.5rem;   /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem;  /* 36px */
+  --text-5xl: 3rem;     /* 48px */
+  --text-6xl: 3.75rem;  /* 60px */
 
   /* Border Radius */
   --radius-none: 0;
-  --radius-sm: 0.125rem;
-  /* 2px */
-  --radius-md: 0.25rem;
-  /* 4px */
-  --radius-lg: 0.5rem;
-  /* 8px */
-  --radius-xl: 0.75rem;
-  /* 12px */
-  --radius-2xl: 1rem;
-  /* 16px */
-  --radius-3xl: 1.5rem;
-  /* 24px */
-  --radius-full: 9999px;
-  /* Para círculos y pastillas */
+  --radius-sm: 0.125rem;  /* 2px */
+  --radius-md: 0.25rem;   /* 4px */
+  --radius-lg: 0.5rem;    /* 8px */
+  --radius-xl: 0.75rem;   /* 12px */
+  --radius-2xl: 1rem;     /* 16px */
+  --radius-3xl: 1.5rem;   /* 24px */
+  --radius-full: 9999px;  /* Para círculos y pastillas */
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 #0000000d;
@@ -368,117 +351,46 @@ form {
   }
 }
 
-
-/* Modal de descarga */
-#modalDescarga {
-  display: none;
-  position: fixed;
-  z-index: var(--z-index-modal);
-  top: 0;
-  left: 0;
+#filtroFecha {
   width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  padding: 0.5rem 2.2rem 0.5rem 0.8rem; /* espacio para el ícono */
+  border: 2px solid var(--negro);
+  border-radius: 7px;
+  font-size: var(--text-sm);
 }
 
-#modalDescarga .modal-content {
-  background-color: var(--blanco);
-  margin: 5% auto;
-  padding: 2rem;
-  border-radius: var(--radius-lg);
-  width: 90%;
-  max-width: 500px;
-  box-shadow: var(--shadow-lg);
+.input-con-icono {
   position: relative;
 }
 
-#modalDescarga h3 {
-  font-size: var(--text-2xl);
-  margin-bottom: 1rem;
-}
-
-#modalDescarga label {
-  font-weight: 600;
-  font-size: var(--text-base);
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-#modalDescarga select,
-#modalDescarga input[type="text"],
-#modalDescarga input[type="date"] {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: var(--text-sm);
-  border: 1px solid var(--gris-claro);
-  border-radius: var(--radius-md);
-}
-
-#modalDescarga .flex-row {
-  gap: 1rem;
-}
-
-#modalDescarga .formatos {
-  margin-bottom: 1rem;
-}
-
-#modalDescarga .formato {
-  flex: 1;
-  padding: 0.75rem;
-  color: var(--blanco);
-  border: none;
-  border-radius: var(--radius-md);
-  font-weight: bold;
-  font-size: var(--text-sm);
-  cursor: pointer;
-}
-
-#modalDescarga .formato.ppt {
-  background-color: #f4a261;
-}
-
-#modalDescarga .formato.xls {
-  background-color: var(--verde);
-}
-
-#modalDescarga .formato.pdf {
-  background-color: var(--rojo);
-}
-
-#modalDescarga .acciones {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1.5rem;
-}
-
-#modalDescarga .acciones button {
-  flex: 1;
-  margin: 0 0.5rem;
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: var(--text-sm);
-  cursor: pointer;
-}
-
-#modalDescarga .acciones .cancelar {
-  background-color: var(--gris);
-  color: var(--blanco);
-}
-
-#modalDescarga .acciones .exportar {
-  background-color: var(--verde);
-  color: var(--blanco);
-}
-
-#cerrarModal {
+.input-con-icono .svg-src {
   position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  font-size: var(--text-xl);
-  font-weight: bold;
-  color: var(--rojo);
-  cursor: pointer;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.input-con-icono .svg-src svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  fill: var(--negro);
+  transition: fill 0.3s ease;
+}
+
+#filtroFecha:focus ~ .svg-src svg {
+  fill: var(--verde);
+}
+
+#filtroFecha:focus {
+  outline: none;
+  border-color: var(--verde);
+}
+
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected {
+  background: var(--verde) !important;
+  color: var(--blanco);
+  border-color: var(--verde) !important;
 }
