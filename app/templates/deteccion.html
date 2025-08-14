@@ -11,45 +11,45 @@
 <h2>Detalles de Detecciones Realizadas</h2>
 
 <div class="detecciones__container">
-    <!-- Filtro lateral -->
-    <aside class="filtros">
-      <div class="filtro__header">
-        <div class="svg-src" data-src="filter"></div>
-        <h4>Filtros</h4>
+  <!-- Filtro lateral -->
+  <aside class="filtros">
+    <div class="filtro__header">
+      <div class="svg-src" data-src="filter"></div>
+      <h4>Filtros</h4>
+    </div>
+
+    <!-- Filtro de Fechas -->
+    <div class="filtros__grupo filtro-icono">
+      <label for="filtroFecha" class="filtros__etiqueta">Fechas</label>
+      <div class="input-con-icono">
+        <input type="text" id="filtroFecha" placeholder="Selecciona un rango">
+        <div class="svg-src" data-src="calendar"></div>
       </div>
-
-<!-- Filtro de Fechas -->
-<div class="filtros__grupo filtro-icono">
-  <label for="filtroFecha" class="filtros__etiqueta">Fechas</label>
-  <div class="input-con-icono">
-    <input type="text" id="filtroFecha" placeholder="Selecciona un rango">
-    <div class="svg-src" data-src="calendar"></div>
-  </div>
-</div>
+    </div>
 
 
-      <!-- Filtro de Parcelas -->
-      <div class="filtros__grupo">
-        <label for="filtroParcelas" class="filtros__etiqueta">Parcela</label>
-        <select id="filtroParcelas" class="filtros__select">
-          <option value="todas">Todas</option>
-          <option value="parcela-a">Parcela A</option>
-          <option value="parcela-b">Parcela B</option>
-          <option value="parcela-c">Parcela C</option>
-        </select>
-      </div>
+    <!-- Filtro de Parcelas -->
+    <div class="filtros__grupo">
+      <label for="filtroParcelas" class="filtros__etiqueta">Parcela</label>
+      <select id="filtroParcelas" class="filtros__select">
+        <option value="todas">Todas</option>
+        <option value="parcela-a">Parcela A</option>
+        <option value="parcela-b">Parcela B</option>
+        <option value="parcela-c">Parcela C</option>
+      </select>
+    </div>
 
-      <!-- Filtro de Áreas -->
-      <div class="filtros__grupo">
-        <label for="filtroAreas" class="filtros__etiqueta">Área</label>
-        <select id="filtroAreas" class="filtros__select">
-          <option value="todas">Todas</option>
-          <option value="area-1">Área 1</option>
-          <option value="area-2">Área 2</option>
-          <option value="area-3">Área 3</option>
-        </select>
-      </div>
-    </aside>
+    <!-- Filtro de Áreas -->
+    <div class="filtros__grupo">
+      <label for="filtroAreas" class="filtros__etiqueta">Área</label>
+      <select id="filtroAreas" class="filtros__select">
+        <option value="todas">Todas</option>
+        <option value="area-1">Área 1</option>
+        <option value="area-2">Área 2</option>
+        <option value="area-3">Área 3</option>
+      </select>
+    </div>
+  </aside>
 
   <!-- Contenedor de listado + detalle -->
   <main class="detalle-container">
